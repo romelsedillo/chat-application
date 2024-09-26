@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { HiOutlinePhone } from "react-icons/hi";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { HiOutlineVideoCamera } from "react-icons/hi2";
+import { MessageOption } from "./MessageOption";
 
 const ChatBox = () => {
   return (
@@ -37,6 +38,38 @@ const ChatBox = () => {
           </div>
         </div>
         <Separator />
+      </div>
+      {/* chat field */}
+      <div className="flex flex-col gap-4 items-start h-full py-4 px-2">
+        <div className="flex items-start gap-4 w-full">
+          <Avatar className="h-4 w-4">
+            <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <p className="bg-gray-300 p-4 rounded">Hello, How are you?</p>
+        </div>
+        <div className="flex items-start gap-4 w-full">
+          <Avatar className="h-4 w-4">
+            <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <p className="bg-gray-300 p-4 rounded">Are you there?</p>
+        </div>
+        <div className="flex items-start justify-end gap-4 w-full">
+          <MessageOption />
+          <p className="bg-blue-300 p-4 rounded">Yeah! I&apos;m here.</p>
+          <Avatar className="h-4 w-4">
+            <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>
+        <div className="flex items-start justify-end gap-4 w-full">
+          <p className="bg-blue-300 p-4 rounded">I&apos;m good.</p>
+          <Avatar className="h-4 w-4">
+            <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </div>
       </div>
 
       <div className="px-2 grid grid-cols-12 py-4">

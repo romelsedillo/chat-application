@@ -10,6 +10,7 @@ import ChatMateProfile from "@/components/layout/ChatMateProfile";
 import { Profile } from "@/components/layout/Profile";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { ProfileOptions } from "@/components/layout/ProfileOptions";
+import { AddChatMate } from "@/components/layout/AddChatMate";
 
 export default function Home() {
   return (
@@ -39,9 +40,7 @@ export default function Home() {
         {/* search bar */}
         <div className="py-8 w-full flex items-center justify-between">
           <Input placeholder="Search" className="rounded h-8 w-56" />
-          <button className="bg-slate-200 w-8 h-8 flex items-center justify-center rounded">
-            <PlusIcon />
-          </button>
+          <AddChatMate />
         </div>
         {/* search bar */}
         <ChatMateGroup />

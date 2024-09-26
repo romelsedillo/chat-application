@@ -14,7 +14,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineProfile } from "react-icons/ai";
 import { AiOutlineUser } from "react-icons/ai";
 
-export function ProfileOptions() {
+export function MessageOption() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -23,12 +23,10 @@ export function ProfileOptions() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 ml-4">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <AiOutlineUser className="w-5 h-5 mr-1" />
-            Profile
+            Delete
           </DropdownMenuItem>
           <DropdownMenuItem>
             <IoSettingsOutline className="w-5 h-5 mr-1" />
@@ -36,7 +34,7 @@ export function ProfileOptions() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuItem>
-            <IoLogOutOutline className="w-5 h-5 mr-1" />
+          <IoLogOutOutline className="w-5 h-5 mr-1" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
