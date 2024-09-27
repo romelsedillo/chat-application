@@ -26,8 +26,8 @@ export function AddChatMate() {
           <Input type="text" placeholder="Search" className="rounded" />
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
+          <AlertDialogAction className="rounded">Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
