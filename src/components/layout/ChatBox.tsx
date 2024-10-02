@@ -3,7 +3,6 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import { MessageOption } from "./MessageOption";
 import { AttachAFile } from "./AttachAFile";
 import { ChooseAnEmoji } from "./ChooseAnEmoji";
