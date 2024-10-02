@@ -21,44 +21,56 @@ import { FaFacebook } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 
-const images = [
-  "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-  "https://i.pravatar.cc/150?u=a042581f4e29026701e",
-  "https://i.pravatar.cc/150?u=a042581f4e29026702b",
-  "https://i.pravatar.cc/150?u=a042581f4e29026703a",
-  "https://i.pravatar.cc/150?u=a042581f4e29026704f",
-  "https://i.pravatar.cc/150?u=a042581f4e29026705c",
-];
-const ChatMateProfile = () => {
+// Define the type for chatMate props
+interface ChatMateProfileProps {
+  chatMate: {
+    name: string;
+    profile: string; // URL for the avatar
+    role?: string; // Optional property
+    address: string;
+    gender: string;
+    social: {
+      facebook: string;
+      twitter: string;
+    };
+    photos: string[]; // Array of photo URLs
+  } | null; // Allow chatMate to be null
+}
+
+const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
+  if (!chatMate) return <div>Select a chat mate to view profile.</div>;
+
   return (
-    <div className=" col-span-1 text-2xl text-center pt-6">
+    <div className="col-span-1 text-2xl text-center pt-6">
       <div className="w-full flex flex-col items-center justify-center mb-2">
         <Avatar className="h-20 w-20">
-          <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={chatMate.profile} />
+          <AvatarFallback>{chatMate.name?.[0] ?? "N/A"}</AvatarFallback>
         </Avatar>
-        <h1 className="font-semibold">Melisa Smith</h1>
-        <p className="text-xs">DevOps Engineer</p>
+        <h1 className="font-semibold">{chatMate.name}</h1>
+        <p className="text-xs">{chatMate.role ?? "Unknown Role"}</p>
       </div>
       <Separator />
       <ScrollArea className="w-full p-2 h-[350px]">
         <div className="mb-2">
           <h6 className="text-left text-sm font-semibold">Basic info</h6>
           <p className="text-left text-xs font-medium ml-2">
-            Address: Kingston, New York 12401.
+            Address: {chatMate.address}
           </p>
-          <p className="text-left text-xs font-medium ml-2">Gender: Female</p>
+          <p className="text-left text-xs font-medium ml-2">
+            Gender: {chatMate.gender}
+          </p>
         </div>
         <div>
           <h6 className="text-left font-semibold text-sm">Photos</h6>
           <div className="grid grid-cols-3 gap-2 mb-2 p-2">
-            {images.map((src, index) => (
+            {chatMate.photos.map((src, index) => (
               <Image
                 key={index}
                 width={80}
                 height={80}
                 src={src}
-                alt={`Avatar ${index + 1}`}
+                alt={`Photo ${index + 1}`}
                 className="rounded"
               />
             ))}
@@ -69,19 +81,19 @@ const ChatMateProfile = () => {
           <div className="flex items-center gap-2 ml-2">
             <FaFacebook className="w-4 h-4 text-gray-600" />
             <Link
-              href="https://www.facebook.com/melisasmith"
+              href={chatMate.social.facebook}
               className="hover:underline text-xs text-blue-900"
             >
-              melisasmith
+              Facebook
             </Link>
           </div>
           <div className="flex items-center gap-2 ml-2">
             <FaXTwitter className="w-4 h-4 text-gray-600" />
             <Link
-              href="https://www.facebook.com/melisasmith"
+              href={chatMate.social.twitter}
               className="hover:underline text-xs text-blue-900"
             >
-              melisasmith
+              Twitter
             </Link>
           </div>
         </div>
@@ -92,7 +104,7 @@ const ChatMateProfile = () => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Are you sure you wan&apos;t to block this person?
+                Are you sure you want to block this person?
               </AlertDialogTitle>
               <AlertDialogDescription>
                 Blocking this user will prevent them from messaging or

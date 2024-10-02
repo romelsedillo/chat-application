@@ -1,118 +1,117 @@
-import React from "react";
+import React, { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { MessageOption } from "./MessageOption";
-import { AttachAFile } from "./AttachAFile";
-import { ChooseAnEmoji } from "./ChooseAnEmoji";
-import { SendAVoiceClip } from "./SendAVoiceClip";
+
 import { ScrollArea } from "../ui/scroll-area";
 import { StartAVoiceCall } from "./StartAVoiceCall";
 import { StartAVideoCall } from "./StartAVideoCall";
+import MessageInput from "./MessageInput";
 
-const ChatBox = () => {
+// Define the type for chatMate props
+interface ChatMate {
+  name: string;
+  profile?: string; // Optional URL for the avatar
+}
+
+interface ChatBoxProps {
+  chatMate: ChatMate | null; // Allow chatMate to be null
+}
+
+const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
+  const [messages, setMessages] = useState<
+    { id: number; sender: "user" | "chatMate"; text: string }[]
+  >([
+    { id: 1, sender: "chatMate", text: "Hello, How are you?" },
+    { id: 2, sender: "chatMate", text: "Are you there?" },
+    { id: 3, sender: "user", text: "Yeah! I'm here." },
+    { id: 4, sender: "user", text: "I'm good, how about you?" },
+    {
+      id: 5,
+      sender: "chatMate",
+      text: "I'm doing well too. What are you up to?",
+    },
+    { id: 6, sender: "user", text: "Just working on some projects." },
+    { id: 7, sender: "user", text: "How about you?" },
+    {
+      id: 8,
+      sender: "chatMate",
+      text: "Just finished a meeting. It was exhausting!",
+    },
+  ]);
+
+  const [input, setInput] = useState<string>("");
+
+  const handleSend = () => {
+    if (input.trim()) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { id: prevMessages.length + 1, sender: "user", text: input },
+      ]);
+      setInput("");
+    }
+  };
+
   return (
     <div className="col-span-2 h-full border-x flex flex-col">
-      <div className="">
-        <div className="flex items-center justify-between py-4 px-2">
-          <div className="flex items-center gap-4 capitalize">
-            <Avatar>
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <h3 className="text-xl font-medium">Melisa Smith</h3>
-          </div>
-          {/* icons */}
-          <div className="flex items-center justify-between gap-2">
-            <StartAVoiceCall />
-            <StartAVideoCall />
-          </div>
+      {/* Chat header */}
+      <div className="flex items-center justify-between py-4 px-2">
+        <div className="flex items-center gap-4 capitalize">
+          <Avatar>
+            <AvatarImage
+              src={
+                chatMate?.profile ||
+                "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              }
+            />
+            <AvatarFallback>{chatMate?.name?.[0] || "CN"}</AvatarFallback>
+          </Avatar>
+          <h3 className="text-xl font-medium">
+            {chatMate?.name || "ChatMate Name"}
+          </h3>
         </div>
-        <Separator />
+        <div className="flex items-center justify-between gap-2">
+          <StartAVoiceCall />
+          <StartAVideoCall />
+        </div>
       </div>
-      {/* Chat field */}
-      <ScrollArea>
-        <div className="flex flex-col gap-2 items-start h-[360px] py-2 px-2">
-          <div className="flex items-start gap-4 w-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-              <AvatarFallback>JB</AvatarFallback>
-            </Avatar>
-            <p className="bg-gray-300 p-4 rounded">Hello, How are you?</p>
-          </div>
-          <div className="flex items-start gap-4 w-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-              <AvatarFallback>JB</AvatarFallback>
-            </Avatar>
-            <p className="bg-gray-300 p-4 rounded">Are you there?</p>
-          </div>
-          <div className="flex items-start justify-end gap-4 w-full">
-            <MessageOption />
-            <p className="bg-blue-300 p-4 rounded">Yeah! I&apos;m here.</p>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex items-start justify-end gap-4 w-full">
-            <p className="bg-blue-300 p-4 rounded">
-              I&apos;m good, how about you?
-            </p>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex items-start gap-4 w-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-              <AvatarFallback>JB</AvatarFallback>
-            </Avatar>
-            <p className="bg-gray-300 p-4 rounded">
-              I&apos;m doing well too. What are you up to?
-            </p>
-          </div>
-          <div className="flex items-start justify-end gap-4 w-full">
-            <p className="bg-blue-300 p-4 rounded">
-              Just working on some projects.
-            </p>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex items-start justify-end gap-4 w-full">
-            <p className="bg-blue-300 p-4 rounded">How about you?</p>
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex items-start gap-4 w-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-              <AvatarFallback>JB</AvatarFallback>
-            </Avatar>
-            <p className="bg-gray-300 p-4 rounded">
-              Just finished a meeting. It was exhausting!
-            </p>
-          </div>
+      <Separator />
+
+      {/* Chat messages */}
+      <ScrollArea className="flex-grow h-[200px]">
+        <div className="flex flex-col gap-2 p-2">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex items-start gap-4 w-full ${
+                message.sender === "user" ? "justify-end" : ""
+              }`}
+            >
+              {message.sender === "chatMate" && (
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={chatMate?.profile} />
+                  <AvatarFallback>{chatMate?.name?.[0] || "CN"}</AvatarFallback>
+                </Avatar>
+              )}
+              <p
+                className={`p-4 rounded ${
+                  message.sender === "user" ? "bg-blue-300" : "bg-gray-300"
+                }`}
+              >
+                {message.text}
+              </p>
+              {message.sender === "user" && (
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+              )}
+            </div>
+          ))}
         </div>
       </ScrollArea>
 
-      <div className="px-2 grid grid-cols-12 py-4">
-        <div className="col-span-2 flex items-center justify-evenly">
-          <AttachAFile />
-          <SendAVoiceClip />
-          <ChooseAnEmoji />
-        </div>
-        <div className="col-span-10 flex items-center justify-between px-2">
-          <Input placeholder="Type a message" className=" h-12 rounded" />
-          <Button className="rounded ml-4">Send</Button>
-        </div>
-      </div>
+      {/* Message input */}
+      <MessageInput input={input} setInput={setInput} handleSend={handleSend} />
     </div>
   );
 };

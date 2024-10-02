@@ -1,54 +1,49 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PlusIcon } from "@radix-ui/react-icons";
+"use client";
+
 import { Input } from "@/components/ui/input";
 import ChatMateGroup from "@/components/layout/ChatMateGroup";
 import ChatBox from "@/components/layout/ChatBox";
-import { HiOutlineVideoCamera } from "react-icons/hi2";
-import { BsThreeDots } from "react-icons/bs";
-import { FiEdit } from "react-icons/fi";
 import ChatMateProfile from "@/components/layout/ChatMateProfile";
 import { Profile } from "@/components/layout/Profile";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { ProfileOptions } from "@/components/layout/ProfileOptions";
 import { AddChatMate } from "@/components/layout/AddChatMate";
+import { useState } from "react";
 
 export default function Home() {
+  const [selectedChatMate, setSelectedChatMate] = useState(null);
+
+  const handleChatMateClick = (chat) => {
+    setSelectedChatMate(chat); // When a chat mate is clicked, set the selected chat mate
+  };
+
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl">
-      {/* right side */}
+      {/* left side */}
       <div className=" col-span-1 text-2xl text-center p-4">
         <div className="flex items-center justify-between">
-          {/* user */}
+          {/* user profile */}
           <Profile />
-          {/* user */}
+          {/* profile options */}
           <div className="flex items-center gap-1">
             <ProfileOptions />
-            {/* <button className="w-8 h-8 p-1 hover:bg-gray-100 rounded-full flex items-center justify-center">
-              <BsThreeDotsVertical className="h-4 w-4 text-gray-600" />
-            </button> */}
-            {/* <button className="w-8 h-8 p-1 hover:bg-gray-100 rounded-full flex items-center justify-center">
-              <BsThreeDots className="h-4 w-4 text-gray-600" />
-            </button> */}
-            {/* <button className="w-8 h-8 p-1 hover:bg-gray-100 rounded-full flex items-center justify-center">
-              <HiOutlineVideoCamera className="w-4 h-4 text-gray-600" />
-            </button> */}
-            {/* <button className="w-7 h-7 p-1 hover:bg-gray-100 rounded-full flex items-center justify-center">
-              <FiEdit className="w-4 h-4 text-gray-600" />
-            </button> */}
           </div>
         </div>
+
         {/* search bar */}
         <div className="py-8 w-full flex items-center justify-between">
           <Input placeholder="Search" className="rounded h-8 w-56" />
           <AddChatMate />
         </div>
-        {/* search bar */}
-        <ChatMateGroup />
-      </div>
-      {/* right side */}
 
-      <ChatBox />
-      <ChatMateProfile />
+        {/* chat mate group */}
+        <ChatMateGroup onChatMateClick={handleChatMateClick} />
+      </div>
+
+      {/* middle: chat box */}
+      <ChatBox chatMate={selectedChatMate} />
+
+      {/* right: chat mate profile */}
+      <ChatMateProfile chatMate={selectedChatMate} />
     </div>
   );
 }
