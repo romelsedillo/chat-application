@@ -43,7 +43,7 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
   return (
     <div className="col-span-1 text-2xl text-center pt-6">
       <div className="w-full flex flex-col items-center justify-center mb-2">
-        <Avatar className="h-20 w-20">
+        <Avatar className="h-12 w-12">
           <AvatarImage src={chatMate.profile} />
           <AvatarFallback>{chatMate.name?.[0] ?? "N/A"}</AvatarFallback>
         </Avatar>
@@ -63,12 +63,12 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
         </div>
         <div>
           <h6 className="text-left font-semibold text-sm">Photos</h6>
-          <div className="grid grid-cols-3 gap-2 mb-2 p-2">
+          <div className="grid grid-cols-4 gap-2 mb-2 p-2">
             {chatMate.photos.map((src, index) => (
               <Image
                 key={index}
-                width={80}
-                height={80}
+                width={60}
+                height={60}
                 src={src}
                 alt={`Photo ${index + 1}`}
                 className="rounded"

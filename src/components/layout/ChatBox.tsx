@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "../ui/scroll-area"; // Use your ScrollArea
 import { StartAVoiceCall } from "./StartAVoiceCall";
 import { StartAVideoCall } from "./StartAVideoCall";
 import MessageInput from "./MessageInput";
 
-// Define the type for chatMate props
+// Define the type for ChatMate and Conversation
 interface ChatMate {
   name: string;
   profile?: string; // Optional URL for the avatar
+  conversations: {
+    id: number;
+    sender: "user" | string; // Name or "user"
+    message: string;
+  }[];
 }
 
 interface ChatBoxProps {
@@ -19,37 +23,39 @@ interface ChatBoxProps {
 
 const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
   const [messages, setMessages] = useState<
-    { id: number; sender: "user" | "chatMate"; text: string }[]
-  >([
-    { id: 1, sender: "chatMate", text: "Hello, How are you?" },
-    { id: 2, sender: "chatMate", text: "Are you there?" },
-    { id: 3, sender: "user", text: "Yeah! I'm here." },
-    { id: 4, sender: "user", text: "I'm good, how about you?" },
-    {
-      id: 5,
-      sender: "chatMate",
-      text: "I'm doing well too. What are you up to?",
-    },
-    { id: 6, sender: "user", text: "Just working on some projects." },
-    { id: 7, sender: "user", text: "How about you?" },
-    {
-      id: 8,
-      sender: "chatMate",
-      text: "Just finished a meeting. It was exhausting!",
-    },
-  ]);
+    { id: number; sender: "user" | string; message: string }[]
+  >(chatMate?.conversations || []);
 
   const [input, setInput] = useState<string>("");
+
+  // Create a ref for the scroll area
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
   const handleSend = () => {
     if (input.trim()) {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { id: prevMessages.length + 1, sender: "user", text: input },
+        { id: prevMessages.length + 1, sender: "user", message: input },
       ]);
       setInput("");
     }
   };
+
+  // Scroll to the bottom whenever messages change
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      const scrollArea = scrollAreaRef.current;
+      requestAnimationFrame(() => {
+        scrollArea.scrollTop = scrollArea.scrollHeight;
+      });
+    }
+  }, [messages]); // Dependency array includes messages
+
+  useEffect(() => {
+    if (chatMate?.conversations) {
+      setMessages(chatMate.conversations);
+    }
+  }, [chatMate]);
 
   return (
     <div className="col-span-2 h-full border-x flex flex-col">
@@ -77,38 +83,43 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
       <Separator />
 
       {/* Chat messages */}
-      <ScrollArea className="flex-grow h-[200px]">
+      <div
+        className="flex-grow h-[200px] overflow-y-auto scroll-smooth focus:scroll-auto"
+        ref={scrollAreaRef}
+      >
         <div className="flex flex-col gap-2 p-2">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`flex items-start gap-4 w-full ${
-                message.sender === "user" ? "justify-end" : ""
+                message.sender !== chatMate?.name ? "justify-end" : ""
               }`}
             >
-              {message.sender === "chatMate" && (
+              {message.sender === chatMate?.name && (
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={chatMate?.profile} />
                   <AvatarFallback>{chatMate?.name?.[0] || "CN"}</AvatarFallback>
                 </Avatar>
               )}
               <p
-                className={`p-4 rounded ${
-                  message.sender === "user" ? "bg-blue-300" : "bg-gray-300"
+                className={`p-4 text-xs mb-2 rounded ${
+                  message.sender !== chatMate?.name
+                    ? "bg-blue-300"
+                    : "bg-gray-300"
                 }`}
               >
-                {message.text}
+                {message.message}
               </p>
-              {message.sender === "user" && (
+              {/* {message.sender === "You" && (
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
-              )}
+              )} */}
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </div>
 
       {/* Message input */}
       <MessageInput input={input} setInput={setInput} handleSend={handleSend} />

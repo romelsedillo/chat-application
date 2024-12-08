@@ -22,7 +22,7 @@ const ChatMateGroup: React.FC<ChatMateGroupProps> = ({ onChatMateClick }) => {
         <div key={index} onClick={() => onChatMateClick(chat)}>
           <ChatMate
             name={chat.name}
-            message={chat.message}
+            message={chat.conversations?.[0]?.message}
             profile={chat.profile}
           />
         </div>
