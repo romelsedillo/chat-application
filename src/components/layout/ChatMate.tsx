@@ -10,10 +10,15 @@ interface ChatMateProps {
 const ChatMate: React.FC<ChatMateProps> = ({ name, message, profile }) => {
   return (
     <div className="flex items-center gap-4 py-3 px-2 capitalize w-full hover:bg-gray-200 cursor-pointer">
-      <Avatar>
-        <AvatarImage src={profile} alt={name} />
-        <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
-      </Avatar>
+      <div className="relative p-1">
+        <Avatar>
+          <AvatarImage src={profile} alt={name} className="rounded-full" />
+
+          <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
+        </Avatar>
+        <div className="absolute z-10 bottom-1 right-1 h-3 w-3 rounded-full bg-lime-400 border border-white"></div>
+      </div>
+
       <div className="flex flex-col">
         <h3 className="text-sm font-medium text-left">{name}</h3>
         <p className="text-xs text-left">{message}</p>

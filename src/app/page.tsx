@@ -17,7 +17,7 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-cols-4 bg-white border rounded-xl">
+    <div className="grid grid-cols-4 bg-white border rounded-xl ">
       {/* left side */}
       <div className=" col-span-1 text-2xl text-center p-4">
         <div className="flex items-center justify-between">
