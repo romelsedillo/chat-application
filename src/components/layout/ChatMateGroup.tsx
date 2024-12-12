@@ -17,7 +17,7 @@ interface ChatMateGroupProps {
 
 const ChatMateGroup: React.FC<ChatMateGroupProps> = ({ onChatMateClick }) => {
   return (
-    <ScrollArea className="h-[380px] w-full rounded-md">
+    <ScrollArea className="h-[400px] w-full rounded-md">
       {chatData.map((chat, index) => (
         <div key={index} onClick={() => onChatMateClick(chat)}>
           <ChatMate

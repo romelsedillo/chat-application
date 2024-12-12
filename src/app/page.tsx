@@ -8,13 +8,19 @@ import { Profile } from "@/components/layout/Profile";
 import { ProfileOptions } from "@/components/layout/ProfileOptions";
 import { AddChatMate } from "@/components/layout/AddChatMate";
 import { useState } from "react";
+import Login from "@/components/layout/Login";
 
 export default function Home() {
+  const [login, setLogin] = useState(false);
   const [selectedChatMate, setSelectedChatMate] = useState(null);
 
   const handleChatMateClick = (chat) => {
     setSelectedChatMate(chat); // When a chat mate is clicked, set the selected chat mate
   };
+
+  if (!login) {
+    return <Login />;
+  }
 
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl ">
