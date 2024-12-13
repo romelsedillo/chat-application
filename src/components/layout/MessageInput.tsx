@@ -28,7 +28,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       <div className="col-span-10 flex items-center justify-between px-2">
         <Input
           placeholder="Type a message"
-          className="h-12 rounded"
+          className="h-12 rounded border border-slate-700"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}

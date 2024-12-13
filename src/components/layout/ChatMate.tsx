@@ -9,10 +9,14 @@ interface ChatMateProps {
 
 const ChatMate: React.FC<ChatMateProps> = ({ name, message, profile }) => {
   return (
-    <div className="flex items-center gap-4 py-3 px-2 capitalize w-full hover:bg-gray-200 cursor-pointer">
+    <div className="flex items-center gap-4  p-1 capitalize w-full hover:bg-gray-200 cursor-pointer">
       <div className="relative p-1">
         <Avatar>
-          <AvatarImage src={profile} alt={name} className="rounded-full h-9 w-9" />
+          <AvatarImage
+            src={profile}
+            alt={name}
+            className="rounded-full h-9 w-9"
+          />
 
           <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
         </Avatar>

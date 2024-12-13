@@ -159,7 +159,7 @@ const RegisterForm: React.FC = () => {
         <div className="flex flex-col items-start w-full">
           <Button
             type="submit"
-            className="w-full py-1 rounded font-thin"
+            className="w-full py-1 rounded"
             disabled={registering}
           >
             {registering ? "Registering..." : "Sign up"}

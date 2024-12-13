@@ -11,7 +11,7 @@ import { useState } from "react";
 import Login from "@/components/layout/Login";
 
 export default function Home() {
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const [selectedChatMate, setSelectedChatMate] = useState(null);
 
   const handleChatMateClick = (chat) => {

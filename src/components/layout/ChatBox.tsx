@@ -68,12 +68,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
                 chatMate?.profile ||
                 "https://i.pravatar.cc/150?u=a042581f4e29026704d"
               }
+              className="rounded-full h-8 w-8"
             />
-            <AvatarFallback>{chatMate?.name?.[0] || "CN"}</AvatarFallback>
+            <AvatarFallback>{chatMate?.name?.[0] || "profile"}</AvatarFallback>
           </Avatar>
-          <h3 className="text-xl font-medium">
-            {chatMate?.name || "ChatMate Name"}
-          </h3>
+          <h3 className="text-xl font-medium">{chatMate?.name || ""}</h3>
         </div>
         <div className="flex items-center justify-between gap-2">
           <StartAVoiceCall />

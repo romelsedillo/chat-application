@@ -119,7 +119,7 @@ export default function LoginForm() {
       <div className="max-w-xs flex flex-col items-center mx-auto py-2 gap-2">
         <Button
           onClick={handleGoogleLogin}
-          className="w-full"
+          className="w-full rounded"
           disabled={loading}
         >
           Google
@@ -127,7 +127,7 @@ export default function LoginForm() {
         </Button>
         <Button
           onClick={handleGitHubLogin}
-          className="w-full"
+          className="w-full rounded"
           disabled={loading}
         >
           GitHub
