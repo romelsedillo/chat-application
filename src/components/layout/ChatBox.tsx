@@ -5,6 +5,9 @@ import { ScrollArea } from "../ui/scroll-area"; // Use your ScrollArea
 import { StartAVoiceCall } from "./StartAVoiceCall";
 import { StartAVideoCall } from "./StartAVideoCall";
 import MessageInput from "./MessageInput";
+import { CgProfile } from "react-icons/cg";
+import profileIcon from "@/images/profile-icon.jpg";
+import Image from "next/image";
 
 // Define the type for ChatMate and Conversation
 interface ChatMate {
@@ -60,7 +63,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
   return (
     <div className="col-span-2 h-full border-x flex flex-col">
       {/* Chat header */}
-      <div className="flex items-center justify-between py-4 px-2">
+      <div className="flex items-center justify-between py-3 px-2">
         <div className="flex items-center gap-4 capitalize">
           <Avatar>
             <AvatarImage
@@ -68,9 +71,18 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
                 chatMate?.profile ||
                 "https://i.pravatar.cc/150?u=a042581f4e29026704d"
               }
-              className="rounded-full h-8 w-8"
             />
-            <AvatarFallback>{chatMate?.name?.[0] || "profile"}</AvatarFallback>
+            <AvatarFallback>
+              {chatMate?.name?.[0] || (
+                // <CgProfile className="w-9 h-9 font-light" />
+                <Image
+                  height={400}
+                  width={400}
+                  src={profileIcon}
+                  alt="profile"
+                />
+              )}
+            </AvatarFallback>
           </Avatar>
           <h3 className="text-xl font-medium">{chatMate?.name || ""}</h3>
         </div>

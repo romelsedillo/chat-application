@@ -13,6 +13,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineProfile } from "react-icons/ai";
 import { AiOutlineUser } from "react-icons/ai";
+import Link from "next/link";
 
 export function ProfileOptions() {
   return (
@@ -28,7 +29,8 @@ export function ProfileOptions() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <AiOutlineUser className="w-5 h-5 mr-1" />
-            Profile
+            <Link href="/profile">Profile</Link>
+            
           </DropdownMenuItem>
           <DropdownMenuItem>
             <IoSettingsOutline className="w-5 h-5 mr-1" />

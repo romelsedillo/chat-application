@@ -1,5 +1,7 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import profileIcon from "@/images/profile-icon.jpg";
+import Image from "next/image";
 
 interface ChatMateProps {
   name: string;
@@ -18,7 +20,9 @@ const ChatMate: React.FC<ChatMateProps> = ({ name, message, profile }) => {
             className="rounded-full h-9 w-9"
           />
 
-          <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
+          <AvatarFallback>
+            <Image height={400} width={400} src={profileIcon} alt="profile" />
+          </AvatarFallback>
         </Avatar>
         <div className="absolute z-10 bottom-1 right-1 h-3 w-3 rounded-full bg-lime-400 border border-white"></div>
       </div>

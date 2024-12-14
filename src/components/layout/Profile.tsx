@@ -12,6 +12,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IoLogOutOutline } from "react-icons/io5";
 import { IoSettingsOutline } from "react-icons/io5";
 import { AiOutlineProfile } from "react-icons/ai";
+import profileIcon from "@/images/profile-icon.jpg";
+import Image from "next/image";
 
 export function Profile() {
   return (
@@ -19,9 +21,16 @@ export function Profile() {
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-2 capitalize cursor-pointer">
           <div className="">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-10 w-10">
               <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>
+                <Image
+                  height={400}
+                  width={400}
+                  src={profileIcon}
+                  alt="profile"
+                />
+              </AvatarFallback>
             </Avatar>
           </div>
           <div className="flex flex-col">
