@@ -23,9 +23,9 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="mx-auto max-w-2xl flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
+    <div className="mx-auto max-w-lg flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
       {/* Avatar Section */}
-      <Avatar className="h-32 w-32 shadow-md">
+      <Avatar className="h-24 w-24 shadow-md">
         <AvatarImage src={userdata.profile} />
         <AvatarFallback>
           <Image
@@ -46,7 +46,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Photos Section */}
-      <div className="mt-8 w-full">
+      <div className="mt-4 w-full">
         <h6 className="text-left font-semibold text-lg mb-4 text-gray-800">
           Photos
         </h6>
@@ -54,8 +54,8 @@ const ProfilePage = () => {
           {userdata.photos.map((src, index) => (
             <Image
               key={index}
-              width={150}
-              height={150}
+              width={100}
+              height={100}
               src={src}
               alt={`Photo ${index + 1}`}
               className="rounded object-cover shadow-sm hover:shadow-md"

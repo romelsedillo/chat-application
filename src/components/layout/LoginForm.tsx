@@ -1,12 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
+import { account } from "@/appwrite/appwrite";
+import { OAuthProvider } from "appwrite";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -14,29 +15,28 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {}, []);
+ 
 
   const handleLogin = () => {
     setLoading(true);
     setLoading(false);
   };
   const handleGoogleLogin = async (): Promise<void> => {
-    setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-      });
+      console.log("Starting Google login process...");
+      const session = await account.createOAuth2Session(
+        OAuthProvider.Google,
 
-      if (error) {
-        toast.error("Google login failed: " + error.message);
-      } else {
-        toast.success("Logged in with Google!");
-        // router.push("/");
-      }
-    } catch (error) {
-      toast.error("An unexpected error occurred during Google login.");
-    } finally {
-      setLoading(false);
+        "http://localhost:3000",
+        "http://localhost:3000/register" // if failed, go to this url
+
+      
+      );
+      console.log(session);
+      toast.success("Successfully logged in!");
+    } catch (error: any) {
+      console.error("Error during Google login:", error);
+      toast.error(`Error during Google login: ${error.message}`);
     }
   };
 

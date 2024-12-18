@@ -8,7 +8,9 @@ const Login: React.FC = () => {
   return (
     <div className="grid grid-cols-2 p-8">
       <div className=" col-span-1 text-4xl text-center">
-        <h1 className="text-5xl text-center font-semibold mt-10">Chat Application</h1>
+        <h1 className="text-5xl text-center font-semibold mt-10">
+          Chat Application
+        </h1>
         <Image
           height={400}
           width={400}
@@ -16,6 +18,10 @@ const Login: React.FC = () => {
           alt="chat"
           className="mx-auto"
         />
+        <div className="text-sm text-left max-w-64 mx-auto">
+          <p>email: test@gmail.com</p>
+          <p>password: chatapplication</p>
+        </div>
       </div>
       <div className="col-span-1 mt-10">
         <LoginForm />

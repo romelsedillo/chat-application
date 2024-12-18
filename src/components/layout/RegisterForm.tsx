@@ -175,7 +175,7 @@ const RegisterForm: React.FC = () => {
       <div className="max-w-xs flex flex-col items-center mx-auto py-2 gap-2">
         <Button
           onClick={handleGoogleLogin}
-          className="w-full"
+          className="w-full rounded"
           disabled={registering}
         >
           Google
@@ -183,7 +183,7 @@ const RegisterForm: React.FC = () => {
         </Button>
         <Button
           onClick={handleGitHubLogin}
-          className="w-full"
+          className="w-full rounded"
           disabled={registering}
         >
           GitHub

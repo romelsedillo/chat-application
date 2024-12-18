@@ -7,18 +7,34 @@ import ChatMateProfile from "@/components/layout/ChatMateProfile";
 import { Profile } from "@/components/layout/Profile";
 import { ProfileOptions } from "@/components/layout/ProfileOptions";
 import { AddChatMate } from "@/components/layout/AddChatMate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Login from "@/components/layout/Login";
+import { account } from "@/appwrite/appwrite";
+import { useAuthStore } from "@/stores/useAuthStore";
+import Loading from "@/components/layout/Loading";
+
 
 export default function Home() {
-  const [login, setLogin] = useState(true);
+  const { isLoggedIn, loading, checkUserSession } = useAuthStore();
   const [selectedChatMate, setSelectedChatMate] = useState(null);
 
+  // Check user session when the component mounts
+  useEffect(() => {
+    checkUserSession();
+  }, [checkUserSession]);
+
+  // Handle chat mate click
   const handleChatMateClick = (chat) => {
-    setSelectedChatMate(chat); // When a chat mate is clicked, set the selected chat mate
+    setSelectedChatMate(chat);
   };
 
-  if (!login) {
+  // Loading state
+  if (loading) {
+    return <Loading/>;
+  }
+
+  // Show login page if not logged in
+  if (!isLoggedIn) {
     return <Login />;
   }
 
@@ -36,7 +52,7 @@ export default function Home() {
         </div>
 
         {/* search bar */}
-        <div className="py-8 w-full flex items-center justify-between">
+        <div className="py-4 w-full flex items-center justify-between">
           <Input placeholder="Search" className="rounded h-8 w-56" />
           <AddChatMate />
         </div>
