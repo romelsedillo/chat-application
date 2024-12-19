@@ -15,11 +15,21 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
- 
-
-  const handleLogin = () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setLoading(true);
-    setLoading(false);
+    try {
+      const session = await account.createEmailPasswordSession(email, password);
+      console.log(session);
+      const user = await account.get();
+      window.location.reload(); // Reload the page
+      toast.success("Successfully logged in!");
+    } catch (error: any) {
+      toast.error("Login failed: " + error.message);
+      console.log({ error });
+    } finally {
+      setLoading(false);
+    }
   };
   const handleGoogleLogin = async (): Promise<void> => {
     try {
@@ -29,8 +39,6 @@ export default function LoginForm() {
 
         "http://localhost:3000",
         "http://localhost:3000/register" // if failed, go to this url
-
-      
       );
       console.log(session);
       toast.success("Successfully logged in!");
