@@ -18,6 +18,11 @@ const MessageInput: React.FC<MessageInputProps> = ({
   setInput,
   handleSend,
 }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("message sent");
+  };
+
   return (
     <div className="px-2 grid grid-cols-12 py-4">
       <div className="col-span-2 flex items-center justify-evenly">
@@ -25,7 +30,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
         <SendAVoiceClip />
         <ChooseAnEmoji />
       </div>
-      <div className="col-span-10 flex items-center justify-between px-2">
+      <form
+        onSubmit={handleSubmit}
+        className="col-span-10 flex items-center justify-between px-2"
+      >
         <Input
           placeholder="Type a message"
           className="h-12 rounded border border-slate-700"
@@ -36,7 +44,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
         <Button className="rounded ml-4" onClick={handleSend}>
           Send
         </Button>
-      </div>
+      </form>
     </div>
   );
 };

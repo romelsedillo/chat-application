@@ -22,6 +22,7 @@ export default function LoginForm() {
       const session = await account.createEmailPasswordSession(email, password);
       console.log(session);
       const user = await account.get();
+      setLoading(true);
       window.location.reload(); // Reload the page
       toast.success("Successfully logged in!");
     } catch (error: any) {

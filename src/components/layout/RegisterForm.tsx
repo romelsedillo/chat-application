@@ -8,36 +8,24 @@ import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { toast } from "react-hot-toast"; // Added toast for feedback
 import { supabase } from "@/lib/supabaseClient"; // Supabase client import
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/layout/Loading";
 
 const RegisterForm: React.FC = () => {
+  const router = useRouter();
+
+  const { isLoggedIn, loading, checkUserSession } = useAuthStore();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [registering, setRegistering] = useState<boolean>(false);
-  const router = useRouter();
-
+  // Check user session when the component mounts
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error("Error checking session: ", error);
-          return;
-        }
-
-        if (data?.session) {
-          // If a session exists, redirect to the homepage
-          router.push("/");
-        }
-      } catch (error) {
-        console.error("Unexpected error during session check: ", error);
-      }
-    };
-
-    checkAuth();
-  }, [router]);
+    checkUserSession();
+  }, [checkUserSession]);
 
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -106,7 +94,12 @@ const RegisterForm: React.FC = () => {
       setRegistering(false);
     }
   };
+  
 
+  // Show login page if not logged in
+  if (isLoggedIn) {
+    router.push("/");
+  }
   return (
     <div className="">
       <h2 className="text-3xl font-semi mb-4 text-center">Sign up</h2>
@@ -194,7 +187,7 @@ const RegisterForm: React.FC = () => {
       <div className="mx-auto max-w-xs mt-4">
         <p className="text-xs">
           Already have an account?{" "}
-          <Link href="/login" className="font-medium underline">
+          <Link href="/" className="font-medium underline">
             Sign in.
           </Link>
         </p>

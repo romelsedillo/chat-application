@@ -1,10 +1,27 @@
 import RegisterForm from "@/components/layout/RegisterForm";
-import React from "react";
+import Image from "next/image";
+import chat from "@/images/chat.png";
+
 
 const RegisterPage = () => {
   return (
     <div className="grid grid-cols-2 p-8">
-      <div className=" col-span-1 text-6xl text-center font-semibold flex items-center justify-center">Chat Application</div>
+      <div className=" col-span-1 text-4xl text-center">
+        <h1 className="text-5xl text-center font-semibold mt-10">
+          Chat Application
+        </h1>
+        <Image
+          height={400}
+          width={400}
+          src={chat}
+          alt="chat"
+          className="mx-auto"
+        />
+        <div className="text-sm text-left max-w-64 mx-auto">
+          <p>email: test@gmail.com</p>
+          <p>password: chatapplication</p>
+        </div>
+      </div>
       <div className="col-span-1 p-4">
         <RegisterForm />
       </div>
