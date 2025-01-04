@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { FaFacebook } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
+import profileIcon from "@/images/profile-icon.jpg";
 
 // Define the type for chatMate props
 interface ChatMateProfileProps {
@@ -45,7 +46,9 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
       <div className="w-full flex flex-col items-center justify-center mb-2">
         <Avatar className="h-12 w-12">
           <AvatarImage src={chatMate.profile} />
-          <AvatarFallback>{chatMate.name?.[0] ?? "N/A"}</AvatarFallback>
+          <AvatarFallback>
+            <Image height={400} width={400} src={profileIcon} alt="profile" />
+          </AvatarFallback>
         </Avatar>
         <h1 className="font-semibold">{chatMate.name}</h1>
         <p className="text-xs">{chatMate.role ?? "Unknown Role"}</p>
@@ -63,7 +66,7 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
         </div>
         <div>
           <h6 className="text-left font-semibold text-sm">Photos</h6>
-          <div className="grid grid-cols-4 gap-2 mb-2 p-2">
+          {/* <div className="grid grid-cols-4 gap-2 mb-2 p-2">
             {chatMate.photos.map((src, index) => (
               <Image
                 key={index}
@@ -74,27 +77,27 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
                 className="rounded"
               />
             ))}
-          </div>
+          </div> */}
         </div>
         <div className="mb-2">
           <h6 className="text-left text-sm font-semibold">Social</h6>
           <div className="flex items-center gap-2 ml-2">
             <FaFacebook className="w-4 h-4 text-gray-600" />
-            <Link
+            {/* <Link
               href={chatMate.social.facebook}
               className="hover:underline text-xs text-blue-900"
             >
               Facebook
-            </Link>
+            </Link> */}
           </div>
           <div className="flex items-center gap-2 ml-2">
             <FaXTwitter className="w-4 h-4 text-gray-600" />
-            <Link
+            {/* <Link
               href={chatMate.social.twitter}
               className="hover:underline text-xs text-blue-900"
             >
               Twitter
-            </Link>
+            </Link> */}
           </div>
         </div>
         <AlertDialog>

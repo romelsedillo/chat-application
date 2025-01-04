@@ -25,24 +25,14 @@ interface ChatBoxProps {
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
-  const [messages, setMessages] = useState<
-    { id: number; sender: "user" | string; message: string }[]
-  >(chatMate?.conversations || []);
+  const [messages, setMessages] = useState([]);
 
   const [input, setInput] = useState<string>("");
 
   // Create a ref for the scroll area
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { id: prevMessages.length + 1, sender: "user", message: input },
-      ]);
-      setInput("");
-    }
-  };
+  const handleSend = () => {};
 
   // Scroll to the bottom whenever messages change
   useEffect(() => {
@@ -55,10 +45,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
   }, [messages]); // Dependency array includes messages
 
   useEffect(() => {
-    if (chatMate?.conversations) {
-      setMessages(chatMate.conversations);
-    }
-  }, [chatMate]);
+    
+  }, []);
 
   return (
     <div className="col-span-2 h-full border-x flex flex-col">

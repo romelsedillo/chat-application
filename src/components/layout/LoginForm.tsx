@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
 import { account } from "@/appwrite/appwrite";
 import { OAuthProvider } from "appwrite";
+import { userLogin } from "@/utils/UserLogin";
 
 export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
@@ -19,18 +20,11 @@ export default function LoginForm() {
     e.preventDefault();
     setLoading(true);
     try {
-      const session = await account.createEmailPasswordSession(email, password);
-      console.log(session);
-      const user = await account.get();
-      setLoading(true);
-      window.location.reload(); // Reload the page
-      toast.success("Successfully logged in!");
-    } catch (error: any) {
-      toast.error("Login failed: " + error.message);
-      console.log({ error });
-    } finally {
-      setLoading(false);
+      await userLogin(email, password);
+    } catch (error) {
+      console.error("Error during login:", error);
     }
+    setLoading(false);
   };
   const handleGoogleLogin = async (): Promise<void> => {
     try {
