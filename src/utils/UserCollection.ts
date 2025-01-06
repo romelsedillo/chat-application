@@ -4,6 +4,7 @@ import {
   projectId,
   databaseId,
   userCollectionId,
+  account,
 } from "@/appwrite/appwrite";
 
 // Function to fetch data from Appwrite
@@ -13,22 +14,22 @@ export const userCollection = async () => {
       .setEndpoint(appwriteEndpoint)
       .setProject(projectId);
     const databases = new Databases(client);
+    const user = await account.get();
+    const userId = user.$id;
 
-    // Fetch documents from the collection
     const response = await databases.listDocuments(
       databaseId, // database id
-      userCollectionId //userCollection id
+      userCollectionId // userCollection id
     );
 
-    // Extract the data from the response and return it
-    const data = response.documents.map((doc) => ({
-      id: doc.$id,
-      name: doc.username,
-      email: doc.email,
-      status: doc.status,
-      created_at: doc.created_at,
-      // Add more fields as needed
-    }));
+    const data = response.documents
+      .filter((doc) => doc.$id !== userId)
+      .map((doc) => ({
+        id: doc.$id,
+        name: doc.name,
+        email: doc.email,
+        status: doc.status,
+      }));
 
     return data;
   } catch (error) {

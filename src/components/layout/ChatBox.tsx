@@ -8,6 +8,8 @@ import MessageInput from "./MessageInput";
 import { CgProfile } from "react-icons/cg";
 import profileIcon from "@/images/profile-icon.jpg";
 import Image from "next/image";
+import { account } from "@/appwrite/appwrite";
+
 
 // Define the type for ChatMate and Conversation
 interface ChatMate {
@@ -47,7 +49,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate }) => {
   useEffect(() => {
     
   }, []);
-
   return (
     <div className="col-span-2 h-full border-x flex flex-col">
       {/* Chat header */}

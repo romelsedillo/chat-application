@@ -30,7 +30,6 @@ const RegisterForm: React.FC = () => {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setRegistering(true);
-  console.log("submitting");
     try {
       // Call the `userRegister` function
       await userRegister(email, password, name);

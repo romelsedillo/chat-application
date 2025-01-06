@@ -1,5 +1,5 @@
 import { account } from "@/appwrite/appwrite";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 export const userLogin = async (email: string, password: string) => {
   try {

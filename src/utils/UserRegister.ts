@@ -1,5 +1,20 @@
 import { account, ID } from "@/appwrite/appwrite";
 import { toast } from "react-hot-toast";
+import addUser from "./AddUser";
+
+function generateRandomString(length = 20) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+// Generate a random string of length 20
+const randomString = generateRandomString();
 
 export const userRegister = async (
   email: string,
@@ -7,8 +22,9 @@ export const userRegister = async (
   name: string
 ) => {
   try {
-    await account.create(ID.unique(), email, password, name);
+    await account.create(ID.custom(randomString), email, password, name);
     await account.createEmailPasswordSession(email, password);
+    await addUser(randomString, name, email);
     toast.success(
       "Registration successful! Please check your email to verify your account before logging in."
     );

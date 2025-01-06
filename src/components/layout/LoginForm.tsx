@@ -26,6 +26,7 @@ export default function LoginForm() {
     }
     setLoading(false);
   };
+
   const handleGoogleLogin = async (): Promise<void> => {
     try {
       console.log("Starting Google login process...");
@@ -45,22 +46,6 @@ export default function LoginForm() {
 
   const handleGitHubLogin = async (): Promise<void> => {
     setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "github",
-      });
-
-      if (error) {
-        toast.error("GitHub login failed: " + error.message);
-      } else {
-        toast.success("Logged in with GitHub!");
-        // router.push("/");
-      }
-    } catch (error) {
-      toast.error("An unexpected error occurred during GitHub login.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -148,3 +133,23 @@ export default function LoginForm() {
     </div>
   );
 }
+
+// const handleGitHubLogin = async (): Promise<void> => {
+//   setLoading(true);
+//   try {
+//     const { error } = await supabase.auth.signInWithOAuth({
+//       provider: "github",
+//     });
+
+//     if (error) {
+//       toast.error("GitHub login failed: " + error.message);
+//     } else {
+//       toast.success("Logged in with GitHub!");
+//       // router.push("/");
+//     }
+//   } catch (error) {
+//     toast.error("An unexpected error occurred during GitHub login.");
+//   } finally {
+//     setLoading(false);
+//   }
+// };
