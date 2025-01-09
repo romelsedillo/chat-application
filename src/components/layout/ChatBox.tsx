@@ -12,81 +12,27 @@ import addMessage from "@/utils/AddMessage";
 import { chatsCollection } from "@/utils/ChatsCollection";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-// Define the type for ChatMate
-interface ChatMate {
-  id: string;
-  name: string;
-  profile?: string; // Optional URL for the avatar
-  user1?: { $id: string; name: string };
-}
-
-interface Message {
-  id: string;
-  senderId: string;
-  chatsId: string;
-  sender: string;
-  content: string;
-}
-
-interface ChatBoxProps {
-  chatMate: ChatMate | null; // Allow chatMate to be null
-}
-
 const ChatBox: React.FC<ChatBoxProps> = ({ chatMate, chatId }) => {
   const [messagesData, setMessagesData] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
-  const [chats, setChats] = useState([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
-  const { loggedInUser } = useAuthStore();
-  const chatsId = chatId;
-  const senderId = loggedInUser?.$id;
 
-  // Fetch messages from the collection
-  const fetchDataMessages = async () => {
+  // Fetch messages for the selected chat
+  const fetchMessages = async () => {
+    if (!chatId) return;
+
+    setLoading(true);
     try {
       const appWriteData = await messagesCollection();
-      setMessagesData(appWriteData);
+      const filteredMessages = appWriteData.filter(
+        (message: Message) => message.chatsId === chatId
+      );
+      setMessagesData(filteredMessages);
     } catch (error) {
-      console.error("Error fetching data from messages collection:", error);
+      console.error("Error fetching messages:", error);
     } finally {
       setLoading(false);
-    }
-  };
-  const fetchChats = async () => {
-    try {
-      const appWriteData = await chatsCollection();
-      setChats(appWriteData);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data from users table:", error);
-    }
-  };
-
-  const handleSendMessage = async (e: FormEvent) => {
-    e.preventDefault();
-
-    console.log(chatsId, senderId, inputMessage);
-
-    // Ensure the message is not just whitespace
-    if (!inputMessage.trim()) {
-      console.log("Cannot send an empty message.");
-      return;
-    }
-
-    try {
-      // Optional: Add loading state if needed
-      console.log("Sending message...");
-
-      // Await if addMessage is asynchronous
-      await addMessage(chatsId, senderId, inputMessage.trim());
-
-      console.log(`Message sent: ${inputMessage.trim()}`);
-
-      // Clear the input field after successful message sending
-      setInputMessage("");
-    } catch (error) {
-      console.error("Failed to send the message:", error);
     }
   };
 
@@ -100,11 +46,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate, chatId }) => {
     }
   }, [messagesData]);
 
+  // Fetch messages when chatId changes
   useEffect(() => {
-    fetchDataMessages();
-    fetchChats();
-  }, []);
-  console.log(chatMate);
+    if (chatId) {
+      fetchMessages();
+    } else {
+      setMessagesData([]); // Clear messages if no chat is selected
+    }
+  }, [chatId]);
+
   return (
     <div className="col-span-2 h-full border-x flex flex-col">
       {/* Chat header */}
@@ -118,18 +68,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate, chatId }) => {
               }
             />
             <AvatarFallback>
-              {chatMate?.name?.[0] || (
-                <Image
-                  height={400}
-                  width={400}
-                  src={profileIcon}
-                  alt="profile"
-                />
-              )}
+              {chatMate?.otherParticipantName?.[0] || "CN"}
             </AvatarFallback>
           </Avatar>
           <h3 className="text-xl font-medium">
-            {chatMate?.user2?.name || chatMate?.name || ""}
+            {chatMate?.otherParticipantName || "Unknown Participant"}
           </h3>
         </div>
         <div className="flex items-center justify-between gap-2">
@@ -137,6 +80,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate, chatId }) => {
           <StartAVideoCall />
         </div>
       </div>
+
       <Separator />
 
       {/* Chat messages */}
@@ -146,56 +90,52 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate, chatId }) => {
       >
         {loading ? (
           <p className="text-center text-gray-500">Loading messages...</p>
-        ) : (
+        ) : chatId && messagesData.length > 0 ? (
           <div className="flex flex-col gap-2 p-2">
-            {chatId ? (
-              messagesData
-                .filter(
-                  (message) =>
-                    message.chatsId === chatId ||
-                    message.senderId === loggedInUser?.$id
-                )
-                .map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex items-start gap-4 w-full ${
-                      message.senderId === loggedInUser?.$id
-                        ? "justify-end"
-                        : ""
-                    }`}
-                  >
-                    {/* Show avatar only for chatMate's messages */}
-                    {message.senderId === chatMate?.user1?.$id && (
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={chatMate?.profile} />
-                        <AvatarFallback>
-                          {chatMate?.name?.[0] || "CN"}
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
+            {messagesData.map((message) => (
+              <div
+                key={message.id}
+                className={`flex items-start gap-4 w-full ${
+                  message.senderId === chatMate?.otherParticipantId
+                    ? "justify-end"
+                    : ""
+                }`}
+              >
+                {message.senderId === chatMate?.otherParticipantId && (
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={chatMate?.profile} />
+                    <AvatarFallback>
+                      {chatMate?.otherParticipantName?.[0] || "CN"}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
 
-                    {/* Message bubble */}
-                    <p
-                      className={`p-4 text-xs mb-2 rounded ${
-                        message.senderId === loggedInUser?.$id
-                          ? "bg-blue-300 text-white" // Outgoing messages style
-                          : "bg-gray-300 text-black" // Incoming messages style
-                      }`}
-                    >
-                      {message.content}
-                    </p>
-                  </div>
-                ))
-            ) : (
-              <p className="text-center text-gray-500">No chat selected</p>
-            )}
+                <p
+                  className={`p-4 text-xs mb-2 rounded ${
+                    message.senderId === chatMate?.otherParticipantId
+                      ? "bg-blue-300 text-white"
+                      : "bg-gray-300 text-black"
+                  }`}
+                >
+                  {message.content}
+                </p>
+              </div>
+            ))}
           </div>
+        ) : (
+          <p className="text-center text-gray-500">
+            {chatId ? "No messages yet." : "No chat selected"}
+          </p>
         )}
       </div>
 
       {/* Message input */}
       <form
-        onSubmit={handleSendMessage}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!inputMessage.trim() || !chatId) return;
+          // Handle sending a message
+        }}
         className="px-2 grid grid-cols-12 py-4"
       >
         <Input
@@ -203,11 +143,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ chatMate, chatId }) => {
           className="col-span-10 h-12 rounded border border-slate-700"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
+          disabled={!chatId}
         />
         <Button
           className="col-span-2 rounded ml-4"
           type="submit"
-          disabled={!inputMessage.trim()}
+          disabled={!inputMessage.trim() || !chatId}
         >
           Send
         </Button>
