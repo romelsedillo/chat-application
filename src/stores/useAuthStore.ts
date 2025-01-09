@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { account } from "@/appwrite/appwrite"; // Import your Appwrite account instance
+import { account } from "@/appwrite/appwrite";
 
 // Define the types for the store
 interface AuthState {

@@ -3,34 +3,35 @@ import {
   appwriteEndpoint,
   projectId,
   databaseId,
-  friendshipsCollectionId,
+  messagesCollectionId,
+  account,
 } from "@/appwrite/appwrite";
 
 // Function to fetch data from Appwrite
-export const friendshipsCollection = async () => {
+export const messagesCollection = async () => {
   try {
     const client = new Client()
       .setEndpoint(appwriteEndpoint)
       .setProject(projectId);
     const databases = new Databases(client);
+    const user = await account.get();
+    const userId = user.$id;
 
-    // Fetch documents from the collection
     const response = await databases.listDocuments(
       databaseId, // database id
-      friendshipsCollectionId //friendshipsCollectionId id
+      messagesCollectionId // userCollection id
     );
 
-    // Extract the data from the response and return it
     const data = response.documents.map((doc) => ({
-      id: doc?.$id,
-      username: doc?.users_id.username,
-      status: doc?.status,
-      // Add more fields as needed
+      id: doc.$id,
+      chatsId: doc.chats_id?.$id,
+      senderId: doc.sender_id?.$id,
+      content: doc.content,
     }));
 
     return data;
   } catch (error) {
-    console.error("Error fetching data from friendships table:", error);
+    console.error("Error fetching messages from AppWrite:", error);
     return [];
   }
 };

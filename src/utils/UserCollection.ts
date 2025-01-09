@@ -33,7 +33,7 @@ export const userCollection = async () => {
 
     return data;
   } catch (error) {
-    console.error("Error fetching data from AppWrite:", error);
+    console.error("Error fetching users from AppWrite:", error);
     return [];
   }
 };

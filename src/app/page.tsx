@@ -14,14 +14,15 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import Loading from "@/components/layout/Loading";
 import { useRouter } from "next/navigation";
 import { userCollection } from "@/utils/UserCollection";
-import { friendshipsCollection } from "@/utils/FriendshipsCollection";
+import { chatsCollection } from "@/utils/ChatsCollection";
+import { messagesCollection } from "@/utils/MessagesCollection";
 
 export default function Home() {
   const router = useRouter();
   const { isLoggedIn, loading, checkUserSession } = useAuthStore();
   const [selectedChatMate, setSelectedChatMate] = useState(null);
   const [userData, setUserData] = useState([]);
-  const [friendshipsData, setFriendshipsData] = useState([]);
+  const [messagesData, setMessagesData] = useState([]);
   const [loadingLocal, setLoadingLocal] = useState(true);
 
   const fetchDataUser = async () => {
@@ -33,17 +34,17 @@ export default function Home() {
       console.error("Error fetching data from users table:", error);
     }
   };
-  const fetchDataFriendships = async () => {
+  const fetchDataMessages = async () => {
     try {
-      const appWriteData = await friendshipsCollection();
-      setFriendshipsData(appWriteData);
+      const appWriteData = await messagesCollection();
+      setMessagesData(appWriteData);
       setLoadingLocal(false);
     } catch (error) {
-      console.error("Error fetching data from friendships table:", error);
+      console.error("Error fetching data from chats table:", error);
     }
   };
   useEffect(() => {
-    fetchDataFriendships();
+    fetchDataMessages();
     fetchDataUser();
   }, []);
   // Check user session when the component mounts
@@ -69,9 +70,7 @@ export default function Home() {
   // if (!isLoggedIn) {
   //   router.push("/login");
   // }
-
-  console.log(userData);
-  console.log(friendshipsData);
+console.log(selectedChatMate?.id);
 
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl">
@@ -97,7 +96,7 @@ export default function Home() {
       </div>
 
       {/* middle: chat box */}
-      <ChatBox chatMate={selectedChatMate} />
+      <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id}/>
 
       {/* right: chat mate profile */}
       <ChatMateProfile chatMate={selectedChatMate} />
