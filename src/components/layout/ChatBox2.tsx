@@ -1,53 +1,34 @@
-import React, { useState, useEffect, useRef, FormEvent } from "react";
-import { Separator } from "@/components/ui/separator";
+import React, { useEffect, useState } from "react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { StartAVoiceCall } from "./StartAVoiceCall";
 import { StartAVideoCall } from "./StartAVideoCall";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { messagesCollection } from "@/utils/MessagesCollection";
 import addMessage from "@/utils/AddMessage";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { Separator } from "@/components/ui/separator";
 import { client, databaseId, messagesCollectionId } from "@/appwrite/appwrite";
 
-const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
-  const [messagesData, setMessagesData] = useState<any[]>([]);
+const ChatBox2 = (chatMate) => {
   const [inputMessage, setInputMessage] = useState("");
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [messagesData, setMessagesData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const { loggedInUser } = useAuthStore();
   const senderId = loggedInUser?.$id;
+  const chatId = "677dfa9d0025198d40b8";
 
   const fetchMessages = async () => {
-    if (!chatId) return;
-
+    setLoading(true);
     try {
       const appWriteData = await messagesCollection();
-      const filteredMessages = appWriteData.filter(
-        (message: any) => message.chatsId === chatId
-      );
-      setMessagesData(filteredMessages);
+      setMessagesData(appWriteData);
     } catch (error) {
       console.error("Error fetching messages:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const scrollToBottom = () => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
-    }
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messagesData]);
-
-  useEffect(() => {
-    if (chatId) {
-      fetchMessages();
-    } else {
-      setMessagesData([]);
-    }
-  }, [chatId]);
 
   useEffect(() => {
     const unsubscribe = client.subscribe(
@@ -60,35 +41,41 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
           )
         ) {
           const newMessage = response.payload;
-          setMessagesData((prevMessages) => [...prevMessages, newMessage]);
           console.log("New message received:", newMessage);
+          setMessagesData((prevMessages) => [...prevMessages, newMessage]);
         }
       }
     );
-
+    if (chatId) {
+      fetchMessages();
+    } else {
+      setMessagesData([]);
+    }
     return () => {
+      console.log("Unsubscribed from real-time updates");
       unsubscribe();
     };
   }, [chatId]);
 
-  const handleSendMessage = async (e: FormEvent) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-
+    console.log(chatId, senderId, inputMessage.trim());
     if (!inputMessage.trim()) {
       console.log("Cannot send an empty message.");
       return;
     }
 
-    setInputMessage("");
-    scrollToBottom();
-
     try {
-      await addMessage(chatId, senderId, inputMessage.trim());
+      const newMessage = await addMessage(
+        chatId,
+        senderId,
+        inputMessage.trim()
+      );
+      setInputMessage("");
     } catch (error) {
       console.error("Failed to send the message:", error);
     }
   };
-
   return (
     <div className="col-span-2 h-full border-x flex flex-col">
       <div className="flex items-center justify-between py-3 px-2">
@@ -113,40 +100,16 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
           <StartAVideoCall />
         </div>
       </div>
-
       <Separator />
-
-      <div className="flex-grow h-[200px] overflow-y-auto" ref={scrollAreaRef}>
-        {chatId && messagesData.length > 0 ? (
-          <div className="flex flex-col gap-2 p-2">
-            {messagesData.map((message, index) => (
-              <div
-                key={index}
-                className={`flex items-start gap-4 w-full ${
-                  message?.senderId === chatMate?.otherParticipantId
-                    ? "justify-start"
-                    : "justify-end"
-                }`}
-              >
-                <p
-                  className={`p-4 text-xs rounded ${
-                    message?.senderId === chatMate?.otherParticipantId
-                      ? "bg-gray-400 text-black"
-                      : "bg-blue-400 text-white"
-                  }`}
-                >
-                  {message?.content || "No content available"}
-                </p>
-              </div>
-            ))}
+      <div>
+        {messagesData.map((message, index) => (
+          <div key={index} className={`flex items-start gap-4 w-full`}>
+            <p className={`p-4 text-xs mb-2 rounded bg-blue-400 `}>
+              {message?.content}
+            </p>
           </div>
-        ) : (
-          <p className="text-center text-gray-500">
-            {chatId ? "No messages yet." : "No chat selected"}
-          </p>
-        )}
+        ))}
       </div>
-
       <form
         onSubmit={handleSendMessage}
         className="px-2 grid grid-cols-12 py-4"
@@ -170,4 +133,4 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
   );
 };
 
-export default ChatBox;
+export default ChatBox2;

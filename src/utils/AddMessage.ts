@@ -42,7 +42,6 @@ export const addMessage = async (
       }
     );
 
-    console.log("New message added successfully:", response);
   } catch (error) {
     console.error("Error adding new message:", error);
     throw error; // Re-throw the error if necessary

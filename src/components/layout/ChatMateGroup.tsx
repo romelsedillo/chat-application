@@ -55,7 +55,6 @@ const ChatMateGroup: React.FC<ChatMateGroupProps> = ({ onChatMateClick }) => {
     setSelectedChatIndex(index); // Update the selected chat index
     onChatMateClick(chat); // Notify the parent component
   };
-  console.log(chats);
   return (
     <ScrollArea className="h-[400px] w-full rounded-md">
       {loading ? (

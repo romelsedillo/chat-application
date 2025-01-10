@@ -77,7 +77,6 @@ export const chatsCollection = async () => {
       })
     );
 
-    console.log("Fetched Chats:", data);
     return data;
   } catch (error) {
     console.error("Error fetching chats for logged-in user:", error);

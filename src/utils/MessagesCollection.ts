@@ -31,7 +31,7 @@ export const messagesCollection = async () => {
 
     return data;
   } catch (error) {
-    console.error("Error fetching messages from AppWrite:", error);
+    console.info("Error fetching messages from AppWrite:", error);
     return [];
   }
 };

@@ -9,17 +9,17 @@ import { ProfileOptions } from "@/components/layout/ProfileOptions";
 import { AddChatMate } from "@/components/layout/AddChatMate";
 import { useState, useEffect } from "react";
 import Login from "@/components/layout/Login";
-import { account } from "@/appwrite/appwrite";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Loading from "@/components/layout/Loading";
 import { useRouter } from "next/navigation";
 import { userCollection } from "@/utils/UserCollection";
-import { chatsCollection } from "@/utils/ChatsCollection";
 import { messagesCollection } from "@/utils/MessagesCollection";
+import ChatBox2 from "@/components/layout/ChatBox2";
 
 export default function Home() {
   const router = useRouter();
-  const { isLoggedIn, loading, checkUserSession } = useAuthStore();
+  const { loggedInUser, isLoggedIn, loading, error, checkUserSession } =
+    useAuthStore();
   const [selectedChatMate, setSelectedChatMate] = useState(null);
   const [userData, setUserData] = useState([]);
   const [messagesData, setMessagesData] = useState([]);
@@ -67,11 +67,6 @@ export default function Home() {
     return <Login />;
   }
 
-  // if (!isLoggedIn) {
-  //   router.push("/login");
-  // }
-console.log(selectedChatMate?.id);
-
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl">
       {/* left side */}
@@ -96,7 +91,8 @@ console.log(selectedChatMate?.id);
       </div>
 
       {/* middle: chat box */}
-      <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id}/>
+      <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id} />
+      {/* <ChatBox2 chatMate={selectedChatMate} chatId={selectedChatMate?.id}/> */}
 
       {/* right: chat mate profile */}
       <ChatMateProfile chatMate={selectedChatMate} />

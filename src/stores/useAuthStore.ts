@@ -6,6 +6,7 @@ interface AuthState {
   loggedInUser: any;
   isLoggedIn: boolean;
   loading: boolean;
+  error: string | null; // Store error messages
   checkUserSession: () => Promise<void>;
 }
 
@@ -13,24 +14,31 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   loggedInUser: null,
   isLoggedIn: false,
-  loading: true, // Initial state is loading
+  loading: true,
+  error: null,
 
   checkUserSession: async () => {
-    set({ loading: true }); // Set loading to true when checking session
+    set({ loading: true, error: null });
     try {
       const user = await account.get();
       set({
         loggedInUser: user,
         isLoggedIn: true,
       });
-    } catch (error) {
-      console.error("No active session found:", error);
+    } catch (error: any) {
+      if (error.code === 401) {
+        // 401 Unauthorized: No active session
+        console.info("No active session found.");
+      } else {
+        console.error("Unexpected error:", error);
+      }
       set({
         loggedInUser: null,
         isLoggedIn: false,
+        error: error?.message || "Unknown error occurred.",
       });
     } finally {
-      set({ loading: false }); // Loading is done
+      set({ loading: false });
     }
   },
 }));
