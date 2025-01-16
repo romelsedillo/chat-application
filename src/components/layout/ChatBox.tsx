@@ -61,6 +61,7 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
         ) {
           const newMessage = response.payload;
           setMessagesData((prevMessages) => [...prevMessages, newMessage]);
+          fetchMessages();
           console.log("New message received:", newMessage);
         }
       }
@@ -79,11 +80,19 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
       return;
     }
 
-    setInputMessage("");
-    scrollToBottom();
-
     try {
-      await addMessage(chatId, senderId, inputMessage.trim());
+      // Temporarily clear the input and disable user actions
+      const messageContent = inputMessage.trim();
+      setInputMessage("");
+
+      // Send the message
+      await addMessage(chatId, senderId, messageContent);
+
+      // Re-fetch the messages after sending
+      await fetchMessages();
+
+      // Ensure the scroll area goes to the bottom after reloading
+      scrollToBottom();
     } catch (error) {
       console.error("Failed to send the message:", error);
     }
