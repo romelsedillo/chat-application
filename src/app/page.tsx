@@ -13,40 +13,13 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import Loading from "@/components/layout/Loading";
 import { useRouter } from "next/navigation";
 import { userCollection } from "@/utils/UserCollection";
-import { messagesCollection } from "@/utils/MessagesCollection";
-import ChatBox2 from "@/components/layout/ChatBox2";
 
 export default function Home() {
   const router = useRouter();
   const { loggedInUser, isLoggedIn, loading, error, checkUserSession } =
     useAuthStore();
   const [selectedChatMate, setSelectedChatMate] = useState(null);
-  const [userData, setUserData] = useState([]);
-  const [messagesData, setMessagesData] = useState([]);
-  const [loadingLocal, setLoadingLocal] = useState(true);
 
-  const fetchDataUser = async () => {
-    try {
-      const appWriteData = await userCollection();
-      setUserData(appWriteData);
-      setLoadingLocal(false);
-    } catch (error) {
-      console.error("Error fetching data from users table:", error);
-    }
-  };
-  const fetchDataMessages = async () => {
-    try {
-      const appWriteData = await messagesCollection();
-      setMessagesData(appWriteData);
-      setLoadingLocal(false);
-    } catch (error) {
-      console.error("Error fetching data from chats table:", error);
-    }
-  };
-  useEffect(() => {
-    fetchDataMessages();
-    fetchDataUser();
-  }, []);
   // Check user session when the component mounts
   useEffect(() => {
     checkUserSession();
@@ -83,7 +56,7 @@ export default function Home() {
         {/* search bar */}
         <div className="py-4 w-full flex items-center justify-between">
           <Input placeholder="Search" className="rounded h-8 w-56" />
-          <AddChatMate />
+          <AddChatMate onChatMateClick={handleChatMateClick}/>
         </div>
 
         {/* chat mate group */}
