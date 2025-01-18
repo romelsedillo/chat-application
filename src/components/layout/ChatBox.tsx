@@ -168,30 +168,31 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
           </p>
         )}
       </div>
-
-      <form
-        onSubmit={handleSendMessage}
-        className="px-2 grid grid-cols-12 py-4"
-      >
+      <div className="flex w-full items-center justify-evenly">
         <div className="col-span-2 flex items-start justify-evenly">
           <Emoji />
           <UploadFile />
         </div>
-        <Input
-          placeholder="Type a message"
-          className="col-span-8 h-12 rounded border border-slate-700"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          disabled={!chatId}
-        />
-        <Button
-          className="col-span-2 rounded ml-4"
-          type="submit"
-          disabled={!inputMessage.trim() || !chatId}
+        <form
+          onSubmit={handleSendMessage}
+          className="px-2 grid grid-cols-12 py-4"
         >
-          Send
-        </Button>
-      </form>
+          <Input
+            placeholder="Type a message"
+            className="col-span-10 h-12 rounded border border-slate-700"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            disabled={!chatId}
+          />
+          <Button
+            className="col-span-2 rounded ml-4"
+            type="submit"
+            disabled={!inputMessage.trim() || !chatId}
+          >
+            Send
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
