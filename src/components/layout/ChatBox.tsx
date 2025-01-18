@@ -9,6 +9,9 @@ import { messagesCollection } from "@/utils/MessagesCollection";
 import addMessage from "@/utils/AddMessage";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { client, databaseId, messagesCollectionId } from "@/appwrite/appwrite";
+import { Emoji } from "./Emoji";
+import { UploadFile } from "./UploadFile";
+import { formatTimestamp } from "@/utils/formatTimestamp";
 
 const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
   const [messagesData, setMessagesData] = useState<any[]>([]);
@@ -97,24 +100,27 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
       console.error("Failed to send the message:", error);
     }
   };
-
+  console.log(messagesData);
   return (
-    <div className="col-span-2 h-full border-x flex flex-col">
+    <div className="col-span-2 h-full flex flex-col">
       <div className="flex items-center justify-between py-3 px-2">
         <div className="flex items-center gap-4 capitalize">
           <Avatar>
             <AvatarImage
               src={
                 chatMate?.profile ||
-                "https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                "https://i.pravatar.cc/150?u=a042581f4e21026704a"
               }
             />
+
             <AvatarFallback>
               {chatMate?.otherParticipantName?.[0] || "CN"}
             </AvatarFallback>
           </Avatar>
           <h3 className="text-xl font-medium">
-            {chatMate?.otherParticipantName || "Unknown Participant"}
+            {chatMate?.otherParticipantName ||
+              chatMate.name ||
+              "Unknown Participant"}
           </h3>
         </div>
         <div className="flex items-center gap-2">
@@ -129,24 +135,31 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
         {chatId && messagesData.length > 0 ? (
           <div className="flex flex-col gap-2 p-2">
             {messagesData.map((message, index) => (
-              <div
-                key={index}
-                className={`flex items-start gap-4 w-full ${
-                  message?.senderId === chatMate?.otherParticipantId
-                    ? "justify-start"
-                    : "justify-end"
-                }`}
-              >
-                <p
-                  className={`p-4 text-xs rounded ${
+              <>
+                <div
+                  key={index}
+                  className={`flex gap-4 w-full ${
                     message?.senderId === chatMate?.otherParticipantId
-                      ? "bg-gray-400 text-black"
-                      : "bg-blue-400 text-white"
+                      ? "justify-start"
+                      : "justify-end"
                   }`}
                 >
-                  {message?.content || "No content available"}
+                  <div>
+                    <p
+                      className={`inline-block max-w-full px-5 py-3 text-xs rounded-full ${
+                        message?.senderId === chatMate?.otherParticipantId
+                          ? "bg-gray-400 text-white"
+                          : "bg-blue-400 text-white"
+                      }`}
+                    >
+                      {message?.content || "No content available"}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-[8px] text-center text-gray-600">
+                  {formatTimestamp(message?.createdAt)}
                 </p>
-              </div>
+              </>
             ))}
           </div>
         ) : (
@@ -160,9 +173,13 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
         onSubmit={handleSendMessage}
         className="px-2 grid grid-cols-12 py-4"
       >
+        <div className="col-span-2 flex items-start justify-evenly">
+          <Emoji />
+          <UploadFile />
+        </div>
         <Input
           placeholder="Type a message"
-          className="col-span-10 h-12 rounded border border-slate-700"
+          className="col-span-8 h-12 rounded border border-slate-700"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           disabled={!chatId}

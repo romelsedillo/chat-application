@@ -44,21 +44,22 @@ const ChatMateGroup: React.FC<ChatMateGroupProps> = ({ onChatMateClick }) => {
     fetchChats();
   }, []);
 
-  useEffect(() => {
-    if (chats.length > 0 && selectedChatIndex === null) {
-      setSelectedChatIndex(0);
-      onChatMateClick(chats[0]);
-    }
-  }, [chats, selectedChatIndex, onChatMateClick]);
+  // useEffect(() => {
+  //   if (chats.length > 0 && selectedChatIndex === null) {
+  //     setSelectedChatIndex(0);
+  //     onChatMateClick(chats[0]);
+  //   }
+  // }, [chats, selectedChatIndex, onChatMateClick]);
 
   const handleChatClick = (chat: Chat, index: number) => {
     setSelectedChatIndex(index); // Update the selected chat index
-    onChatMateClick(chat); // Notify the parent component
+    onChatMateClick(chat);
+    console.log(chat); // Notify the parent component
   };
   return (
     <ScrollArea className="h-[400px] w-full rounded-md">
       {loading ? (
-        <p className="text-center text-gray-500">Loading chats...</p>
+        <p className="text-center text-gray-500">Loading. Please wait...</p>
       ) : chats.length > 0 ? (
         chats.map((chat, index) => (
           <div

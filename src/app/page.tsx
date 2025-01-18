@@ -11,12 +11,10 @@ import { useState, useEffect } from "react";
 import Login from "@/components/layout/Login";
 import { useAuthStore } from "@/stores/useAuthStore";
 import Loading from "@/components/layout/Loading";
-import { useRouter } from "next/navigation";
-import { userCollection } from "@/utils/UserCollection";
+import MyProfile2 from "@/components/layout/MyProfile2";
 
 export default function Home() {
-  const router = useRouter();
-  const { loggedInUser, isLoggedIn, loading, error, checkUserSession } =
+  const { loggedInUser, isLoggedIn, loading, checkUserSession } =
     useAuthStore();
   const [selectedChatMate, setSelectedChatMate] = useState(null);
 
@@ -43,32 +41,34 @@ export default function Home() {
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl">
       {/* left side */}
-      <div className=" col-span-1 text-2xl text-center p-4">
+      <div className=" col-span-1 text-2xl text-center p-4 border-x">
         <div className="flex items-center justify-between">
           {/* user profile */}
-          <Profile />
-          {/* profile options */}
-          <div className="flex items-center gap-1">
-            <ProfileOptions />
-          </div>
+          <Profile onChatMateClick={handleChatMateClick}/>
         </div>
 
         {/* search bar */}
         <div className="py-4 w-full flex items-center justify-between">
           <Input placeholder="Search" className="rounded h-8 w-56" />
-          <AddChatMate onChatMateClick={handleChatMateClick}/>
+          <AddChatMate onChatMateClick={handleChatMateClick} />
         </div>
 
         {/* chat mate group */}
         <ChatMateGroup onChatMateClick={handleChatMateClick} />
       </div>
 
-      {/* middle: chat box */}
-      <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id} />
-      {/* <ChatBox2 chatMate={selectedChatMate} chatId={selectedChatMate?.id}/> */}
+      {selectedChatMate ? (
+        <>
+          {/* Middle: Chat box */}
+          <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id} />
 
-      {/* right: chat mate profile */}
-      <ChatMateProfile chatMate={selectedChatMate} />
+          {/* Right: Chat mate profile */}
+          <ChatMateProfile chatMate={selectedChatMate} />
+        </>
+      ) : (
+        <MyProfile2 />
+        // <h1>Profile</h1>
+      )}
     </div>
   );
 }

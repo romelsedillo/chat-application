@@ -19,7 +19,6 @@ import {
 import { toast } from "sonner";
 import { FaFacebook } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import Link from "next/link";
 import profileIcon from "@/images/profile-icon.jpg";
 
 // Define the type for chatMate props
@@ -30,6 +29,7 @@ interface ChatMateProfileProps {
     role?: string; // Optional property
     address: string;
     gender: string;
+    otherParticipantName: string;
     social: {
       facebook: string;
       twitter: string;
@@ -42,62 +42,70 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
   if (!chatMate) return <div>Select a chat mate to view profile.</div>;
 
   return (
-    <div className="col-span-1 text-2xl text-center pt-6">
-      <div className="w-full flex flex-col items-center justify-center mb-2">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={chatMate.profile} />
-          <AvatarFallback>
-            <Image height={400} width={400} src={profileIcon} alt="profile" />
-          </AvatarFallback>
-        </Avatar>
-        <h1 className="font-semibold">{chatMate.name}</h1>
-        <p className="text-xs">{chatMate.role ?? "Unknown Role"}</p>
+    <div className="col-span-1 text-2xl text-center pt-6 border-x">
+      <div className="w-full flex flex-col items-center justify-center mb-3">
+        <Image
+          height={50}
+          width={50}
+          src="https://i.pravatar.cc/150?u=a042581f4e21026704a"
+          alt="profile"
+          className="rounded-full"
+        />
+
+        <h1 className="font-semibold capitalize">
+          {chatMate?.name || chatMate?.otherParticipantName}
+        </h1>
+        <p className="text-xs">{chatMate.role ?? "Software Engineer"}</p>
       </div>
       <Separator />
       <ScrollArea className="w-full p-2 h-[350px]">
         <div className="mb-2">
           <h6 className="text-left text-sm font-semibold">Basic info</h6>
           <p className="text-left text-xs font-medium ml-2">
-            Address: {chatMate.address}
+            Address: {chatMate.address || "123 Elm Street, Springfield"}
           </p>
           <p className="text-left text-xs font-medium ml-2">
-            Gender: {chatMate.gender}
+            Gender: {chatMate.gender || "female"}
           </p>
         </div>
-        <div>
+        <div className="mb-2">
           <h6 className="text-left font-semibold text-sm">Photos</h6>
-          {/* <div className="grid grid-cols-4 gap-2 mb-2 p-2">
-            {chatMate.photos.map((src, index) => (
-              <Image
-                key={index}
-                width={60}
-                height={60}
-                src={src}
-                alt={`Photo ${index + 1}`}
-                className="rounded"
-              />
-            ))}
-          </div> */}
+          <div className="flex justify-evenly px-4">
+            <Image
+              src="https://i.pravatar.cc/150?u=a042521f4e29026704a"
+              width={50}
+              height={50}
+              alt="Picture of the author"
+              className="rounded"
+            />
+            <Image
+              src="https://i.pravatar.cc/150?u=a042581f4e39026704a"
+              width={50}
+              height={50}
+              alt="Picture of the author"
+              className="rounded"
+            />
+            <Image
+              src="https://i.pravatar.cc/150?u=a04258144e29026704a"
+              width={50}
+              height={50}
+              alt="Picture of the author"
+              className="rounded"
+            />
+            <Image
+              src="https://i.pravatar.cc/150?u=a042581f4e59026704a"
+              width={50}
+              height={50}
+              alt="Picture of the author"
+              className="rounded"
+            />
+          </div>
         </div>
         <div className="mb-2">
           <h6 className="text-left text-sm font-semibold">Social</h6>
           <div className="flex items-center gap-2 ml-2">
             <FaFacebook className="w-4 h-4 text-gray-600" />
-            {/* <Link
-              href={chatMate.social.facebook}
-              className="hover:underline text-xs text-blue-900"
-            >
-              Facebook
-            </Link> */}
-          </div>
-          <div className="flex items-center gap-2 ml-2">
             <FaXTwitter className="w-4 h-4 text-gray-600" />
-            {/* <Link
-              href={chatMate.social.twitter}
-              className="hover:underline text-xs text-blue-900"
-            >
-              Twitter
-            </Link> */}
           </div>
         </div>
         <AlertDialog>
@@ -120,12 +128,11 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
               <AlertDialogAction
                 className="rounded"
                 onClick={() =>
-                  toast("User blocked", {
-                    description:
-                      "This person has been successfully blocked and will no longer be able to interact with you.",
+                  toast.error("User blocked", {
+                    description: "Sorry :(. This feature is under development.",
                     action: {
-                      label: "Undo",
-                      onClick: () => console.log("Undo"),
+                      label: "Cancel",
+                      onClick: () => console.log("Cancelled"),
                     },
                   })
                 }

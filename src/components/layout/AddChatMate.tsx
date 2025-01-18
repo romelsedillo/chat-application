@@ -16,22 +16,19 @@ interface User {
 }
 
 export function AddChatMate({ onChatMateClick }) {
-  const [users, setUsers] = useState<User[]>([]); // Users fetched from the server
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]); // Users filtered based on the search input
-  const [searchQuery, setSearchQuery] = useState(""); // Search query input state
-  const [loading, setLoading] = useState(false); // Loading state for data fetching
-  const [error, setError] = useState<string | null>(null); // Error state for user fetching
-  const [showRecommended, setShowRecommended] = useState(false); // Control visibility of recommendations
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showRecommended, setShowRecommended] = useState(false);
 
-  // Fetch users from the collection
   const fetchDataUser = async () => {
     setLoading(true);
-    setError(null);
     try {
       const appWriteData = await userCollection();
       setUsers(appWriteData);
     } catch (err) {
-      console.error("Error fetching data from users table:", err);
       setError("Failed to load users. Please try again later.");
     } finally {
       setLoading(false);
@@ -42,7 +39,6 @@ export function AddChatMate({ onChatMateClick }) {
     fetchDataUser();
   }, []);
 
-  // Debounce search input
   useEffect(() => {
     const timeout = setTimeout(() => {
       const query = searchQuery.toLowerCase().trim();
@@ -54,17 +50,11 @@ export function AddChatMate({ onChatMateClick }) {
         )
       );
       setShowRecommended(query.length > 0);
-    }, 300); // 300ms debounce
+    }, 300);
 
     return () => clearTimeout(timeout);
   }, [searchQuery, users]);
 
-  // const handleChat = (chatMateId: string) => {
-  //   router.push(`/chatbox/${chatMateId}`);
-  // };
-  const handleChatClick = (user) => {
-    onChatMateClick(user); // Notify the parent component
-  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -77,19 +67,14 @@ export function AddChatMate({ onChatMateClick }) {
           <DialogTitle>Search new friends</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col w-full py-4 items-center">
-          {/* Search Input */}
           <input
             placeholder="Search by name or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-[500px] py-3 px-3 border border-slate-700 outline-none rounded mb-4"
           />
-
-          {/* Display Loading or Error */}
-          {loading && <p className="text-gray-500">Loading users...</p>}
+          {loading && <p>Loading users...</p>}
           {error && <p className="text-red-500">{error}</p>}
-
-          {/* Display Filtered Users */}
           {showRecommended && !loading && !error && (
             <ul className="w-[500px] flex flex-col gap-3">
               {filteredUsers.length > 0 ? (
@@ -104,7 +89,7 @@ export function AddChatMate({ onChatMateClick }) {
                     </div>
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => handleChatClick(user)}
+                      onClick={() => onChatMateClick(user)}
                     >
                       Chat
                     </button>

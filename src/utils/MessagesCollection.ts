@@ -27,8 +27,9 @@ export const messagesCollection = async () => {
       chatsId: doc.chats_id?.$id,
       senderId: doc.sender_id?.$id,
       content: doc.content,
+      createdAt: doc.$createdAt,
+      updatedAt: doc.$updatedAt,
     }));
-
     return data;
   } catch (error) {
     console.info("Error fetching messages from AppWrite:", error);
