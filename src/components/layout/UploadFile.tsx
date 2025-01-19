@@ -14,7 +14,11 @@ export function UploadFile() {
           <button
             onClick={() =>
               toast.error("Upload a file.", {
-                description: "Sorry :(. This feature is under development.",
+                description: (
+                  <span className="text-red-500">
+                    Sorry :(. This feature is under development.
+                  </span>
+                ),
                 action: {
                   label: "Cancel",
                   onClick: () => console.log("Cancel"),

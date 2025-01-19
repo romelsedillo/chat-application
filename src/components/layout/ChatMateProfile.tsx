@@ -62,10 +62,10 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
         <div className="mb-2">
           <h6 className="text-left text-sm font-semibold">Basic info</h6>
           <p className="text-left text-xs font-medium ml-2">
-            Address: {chatMate.address || "123 Elm Street, Springfield"}
+            Gender: {chatMate.gender || "female"}
           </p>
           <p className="text-left text-xs font-medium ml-2">
-            Gender: {chatMate.gender || "female"}
+            Address: {chatMate.address || "123 Elm Street, Springfield"}
           </p>
         </div>
         <div className="mb-2">
@@ -129,7 +129,11 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
                 className="rounded"
                 onClick={() =>
                   toast.error("User blocked", {
-                    description: "Sorry :(. This feature is under development.",
+                    description: (
+                      <span className="text-red-500">
+                        Sorry :(. This feature is under development.
+                      </span>
+                    ),
                     action: {
                       label: "Cancel",
                       onClick: () => console.log("Cancelled"),

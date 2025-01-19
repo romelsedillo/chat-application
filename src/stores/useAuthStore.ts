@@ -21,6 +21,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true, error: null });
     try {
       const user = await account.get();
+      
       set({
         loggedInUser: user,
         isLoggedIn: true,

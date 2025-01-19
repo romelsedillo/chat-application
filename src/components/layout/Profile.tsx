@@ -4,10 +4,27 @@ import Image from "next/image";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { CiLogout } from "react-icons/ci";
 import { account } from "@/appwrite/appwrite";
+import { signedInUser } from "@/utils/SignedInUser";
+import { useState, useEffect } from "react";
 
 export function Profile({ onChatMateClick }) {
+  const [currentUser, setCurrentUser] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const { loggedInUser } = useAuthStore();
 
+  const fetchUserData = async () => {
+    try {
+      const appWriteData = await signedInUser();
+      setCurrentUser(appWriteData);
+    } catch (error) {
+      console.error("Error fetching data from users table:", error);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+  const user = currentUser[0];
   const handleProfileClick = () => {
     onChatMateClick(null); // Pass `null` to clear the selected chat
   };
@@ -26,7 +43,7 @@ export function Profile({ onChatMateClick }) {
     <div className="w-full flex items-center gap-2">
       {/* Avatar Section */}
       <Avatar className="h-12 w-12 cursor-pointer" onClick={handleProfileClick}>
-        <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
+        <AvatarImage src={user?.profileUrl} />
         <AvatarFallback>
           <Image height={400} width={400} src={profileIcon} alt="Profile" />
         </AvatarFallback>

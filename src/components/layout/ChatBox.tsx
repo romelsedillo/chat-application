@@ -16,12 +16,17 @@ import { formatTimestamp } from "@/utils/formatTimestamp";
 const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
   const [messagesData, setMessagesData] = useState<any[]>([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { loggedInUser } = useAuthStore();
   const senderId = loggedInUser?.$id;
 
-  const fetchMessages = async () => {
+  const fetchMessages = async (isInitialLoad = false) => {
     if (!chatId) return;
+
+    if (isInitialLoad) {
+      setLoading(true); // Only set loading for the initial load
+    }
 
     try {
       const appWriteData = await messagesCollection();
@@ -31,6 +36,10 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
       setMessagesData(filteredMessages);
     } catch (error) {
       console.error("Error fetching messages:", error);
+    } finally {
+      if (isInitialLoad) {
+        setLoading(false); // Turn off loading after the initial load
+      }
     }
   };
 
@@ -46,7 +55,7 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
 
   useEffect(() => {
     if (chatId) {
-      fetchMessages();
+      fetchMessages(true); // Pass `true` to indicate it's the initial load
     } else {
       setMessagesData([]);
     }
@@ -56,7 +65,6 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
     const unsubscribe = client.subscribe(
       `databases.${databaseId}.collections.${messagesCollectionId}.documents`,
       (response) => {
-        console.log("Real-time event received:", response);
         if (
           response.events.includes(
             "databases.*.collections.*.documents.*.create"
@@ -65,7 +73,6 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
           const newMessage = response.payload;
           setMessagesData((prevMessages) => [...prevMessages, newMessage]);
           fetchMessages();
-          console.log("New message received:", newMessage);
         }
       }
     );
@@ -84,23 +91,22 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
     }
 
     try {
-      // Temporarily clear the input and disable user actions
       const messageContent = inputMessage.trim();
       setInputMessage("");
 
       // Send the message
       await addMessage(chatId, senderId, messageContent);
 
-      // Re-fetch the messages after sending
-      await fetchMessages();
+      // Instead of re-fetching all messages, append the new message directly
+     
 
-      // Ensure the scroll area goes to the bottom after reloading
+      // Ensure the scroll area goes to the bottom
       scrollToBottom();
     } catch (error) {
       console.error("Failed to send the message:", error);
     }
   };
-  console.log(messagesData);
+
   return (
     <div className="col-span-2 h-full flex flex-col">
       <div className="flex items-center justify-between py-3 px-2">
@@ -112,7 +118,6 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
                 "https://i.pravatar.cc/150?u=a042581f4e21026704a"
               }
             />
-
             <AvatarFallback>
               {chatMate?.otherParticipantName?.[0] || "CN"}
             </AvatarFallback>
@@ -132,12 +137,13 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
       <Separator />
 
       <div className="flex-grow h-[200px] overflow-y-auto" ref={scrollAreaRef}>
-        {chatId && messagesData.length > 0 ? (
+        {loading ? (
+          <p className="text-center text-gray-500">Loading messages...</p>
+        ) : chatId && messagesData.length > 0 ? (
           <div className="flex flex-col gap-2 p-2">
             {messagesData.map((message, index) => (
-              <>
+              <React.Fragment key={index}>
                 <div
-                  key={index}
                   className={`flex gap-4 w-full ${
                     message?.senderId === chatMate?.otherParticipantId
                       ? "justify-start"
@@ -148,7 +154,7 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
                     <p
                       className={`inline-block max-w-full px-5 py-3 text-xs rounded-full ${
                         message?.senderId === chatMate?.otherParticipantId
-                          ? "bg-gray-400 text-white"
+                          ? "bg-slate-400 text-white"
                           : "bg-blue-400 text-white"
                       }`}
                     >
@@ -157,9 +163,11 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
                   </div>
                 </div>
                 <p className="text-[8px] text-center text-gray-600">
-                  {formatTimestamp(message?.createdAt)}
+                  {message?.createdAt
+                    ? formatTimestamp(message.createdAt)
+                    : "Loading..."}
                 </p>
-              </>
+              </React.Fragment>
             ))}
           </div>
         ) : (

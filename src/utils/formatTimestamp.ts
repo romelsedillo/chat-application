@@ -9,13 +9,13 @@ export const formatTimestamp = (isoTimestamp: string): string => {
   };
 
   const date = new Date(isoTimestamp);
-  return (
-    date.toLocaleDateString("en-US", options) +
-    ", " +
-    date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-  );
+  return date.toLocaleDateString("en-US", options);
 };
+
+// +
+//     ", " +
+//     date.toLocaleTimeString("en-US", {
+//       hour: "numeric",
+//       minute: "2-digit",
+//       hour12: true,
+//     })

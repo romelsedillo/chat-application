@@ -15,7 +15,11 @@ export function StartAVideoCall() {
           <button
             onClick={() =>
               toast.error("Video call", {
-                description: "Sorry :(. This feature is under development.",
+                description: (
+                  <span className="text-red-500">
+                    Sorry :(. This feature is under development.
+                  </span>
+                ),
                 action: {
                   label: "Cancel",
                   onClick: () => console.log("Cancelled"),
