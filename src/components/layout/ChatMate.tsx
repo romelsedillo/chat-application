@@ -9,7 +9,7 @@ interface ChatMateProps {
   profile: string;
 }
 
-const ChatMate: React.FC<ChatMateProps> = ({ name, message, profile }) => {
+const ChatMate: React.FC<ChatMateProps> = ({ id, name, message, profile }) => {
   return (
     <div className="flex items-center gap-4  p-1 capitalize w-full hover:bg-gray-200 cursor-pointer">
       <div className="relative p-1">

@@ -1,10 +1,12 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import addChat from "@/utils/AddChat";
 import { userCollection } from "@/utils/UserCollection";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
@@ -20,7 +22,7 @@ export function AddChatMate({ onChatMateClick }) {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [showRecommended, setShowRecommended] = useState(false);
 
   const fetchDataUser = async () => {
@@ -55,6 +57,10 @@ export function AddChatMate({ onChatMateClick }) {
     return () => clearTimeout(timeout);
   }, [searchQuery, users]);
 
+  const handleSubmit = async (user) => {
+    await onChatMateClick(user);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -65,6 +71,9 @@ export function AddChatMate({ onChatMateClick }) {
       <DialogContent className="sm:max-w-[600px] rounded-sm">
         <DialogHeader>
           <DialogTitle>Search new friends</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you're done.
+          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col w-full py-4 items-center">
           <input
@@ -89,7 +98,7 @@ export function AddChatMate({ onChatMateClick }) {
                     </div>
                     <button
                       className="text-blue-500 hover:text-blue-700"
-                      onClick={() => onChatMateClick(user)}
+                      onClick={() => handleSubmit(user)}
                     >
                       Chat
                     </button>

@@ -18,7 +18,7 @@ export const profilePictures = [
     alt: "Picture of the author",
   },
   {
-    src: "https://i.pravatar.cc/300?u=a042581f4e29026704d",
+    src: "https://i.pravatar.cc/300?u=a042581f1e29026704d",
     width: 100,
     height: 100,
     alt: "Picture of the author",
@@ -30,7 +30,7 @@ export const profilePictures = [
     alt: "Picture of the author",
   },
   {
-    src: "https://i.pravatar.cc/300?u=a042581f4e29026706f",
+    src: "https://i.pravatar.cc/300?u=a042581f2e29026706f",
     width: 100,
     height: 100,
     alt: "Picture of the author",
@@ -48,7 +48,7 @@ export const profilePictures = [
     alt: "Picture of the author",
   },
   {
-    src: "https://i.pravatar.cc/300?u=a042581f4e29026709i",
+    src: "https://i.pravatar.cc/300?u=a042511f4e29026709i",
     width: 100,
     height: 100,
     alt: "Picture of the author",

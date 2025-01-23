@@ -1,7 +1,5 @@
-import { Client, Databases, ID } from "appwrite";
+import { ID } from "appwrite";
 import {
-  appwriteEndpoint,
-  projectId,
   databaseId,
   messagesCollectionId,
   databases,
@@ -13,37 +11,29 @@ import {
  * @param {string} senderId - The ID of the sender.
  * @param {string} inputMessage - The content of the message.
  */
-export const addMessage = async (
-  chatsId: string,
+export const addMessageFirstTime = async (
+  randomId: string,
   senderId: string,
   inputMessage: string
 ): Promise<void> => {
   try {
-    // Initialize Appwrite client and database
-
-    // Validate input
-    if (!chatsId || !senderId || !inputMessage.trim()) {
-      throw new Error(
-        "Invalid input: Chats ID, Sender ID, and Message are required."
-      );
-    }
-
     // Create a new document in the messages collection
     const response = await databases.createDocument(
       databaseId,
       messagesCollectionId,
       ID.unique(), // Generate a unique ID for the message
       {
-        chats_id: chatsId,
+        chats_id: randomId,
         sender_id: senderId,
         content: inputMessage.trim(), // Trim whitespace from the message
       }
     );
-    console.log("New message added:", response);
+    console.log(randomId);
+    console.log("First message added:", response);
   } catch (error) {
-    console.error("Error adding new message:", error);
+    console.error("Error adding first message:", error);
     throw error; // Re-throw the error if necessary
   }
 };
 
-export default addMessage;
+export default addMessageFirstTime;

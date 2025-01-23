@@ -1,5 +1,10 @@
 import { Client, Databases, ID } from "appwrite";
-import { appwriteEndpoint, projectId, databaseId, userCollectionId } from "@/appwrite/appwrite";
+import {
+  appwriteEndpoint,
+  projectId,
+  databaseId,
+  userCollectionId,
+} from "@/appwrite/appwrite";
 
 export const addUser = async (randomString, name, email) => {
   try {
@@ -16,6 +21,7 @@ export const addUser = async (randomString, name, email) => {
         name: name,
         email: email,
         status: "online",
+        profileUrl: null,
       }
     );
 

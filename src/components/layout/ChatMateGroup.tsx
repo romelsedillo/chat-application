@@ -19,9 +19,13 @@ interface Chat {
 // Define the props type for the ChatMateGroup component
 interface ChatMateGroupProps {
   onChatMateClick: (chat: Chat) => void;
+  chatId: (chat: Chat) => void;
 }
 
-const ChatMateGroup: React.FC<ChatMateGroupProps> = ({ onChatMateClick }) => {
+const ChatMateGroup: React.FC<ChatMateGroupProps> = ({
+  chatId,
+  onChatMateClick,
+}) => {
   const [selectedChatIndex, setSelectedChatIndex] = useState<number | null>(
     null
   );
@@ -54,7 +58,7 @@ const ChatMateGroup: React.FC<ChatMateGroupProps> = ({ onChatMateClick }) => {
   const handleChatClick = (chat: Chat, index: number) => {
     setSelectedChatIndex(index); // Update the selected chat index
     onChatMateClick(chat);
-    console.log(chat); // Notify the parent component
+    chatId(chat.id);
   };
   return (
     <ScrollArea className="h-[400px] w-full rounded-md">

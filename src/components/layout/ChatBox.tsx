@@ -12,14 +12,45 @@ import { client, databaseId, messagesCollectionId } from "@/appwrite/appwrite";
 import { Emoji } from "./Emoji";
 import { UploadFile } from "./UploadFile";
 import { formatTimestamp } from "@/utils/formatTimestamp";
+import addChat from "@/utils/AddChat";
+import generateRandomString from "@/utils/generateRandomString";
+import { chatsCollection } from "@/utils/ChatsCollection";
+import { UpdateChat } from "@/utils/UpdateChat";
+import { addMessageFirstTime } from "@/utils/AddMessageFirstTime";
 
-const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
+const ChatBox = ({
+  chatMate,
+  chatId,
+  ChatId,
+}: {
+  chatMate: any;
+  chatId: string;
+  ChatId: string;
+}) => {
   const [messagesData, setMessagesData] = useState<any[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false); // Loading state
+  const [chats, setChats] = useState<Chat[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { loggedInUser } = useAuthStore();
   const senderId = loggedInUser?.$id;
+  const chatMateId = chatMate?.id;
+  const randomId = generateRandomString(20);
+
+  const fetchChats = async () => {
+    try {
+      const appWriteData = await chatsCollection();
+      setChats(appWriteData);
+    } catch (error) {
+      console.error("Error fetching data from users table:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchChats();
+  }, []);
 
   const fetchMessages = async (isInitialLoad = false) => {
     if (!chatId) return;
@@ -95,10 +126,17 @@ const ChatBox = ({ chatMate, chatId }: { chatMate: any; chatId: string }) => {
       setInputMessage("");
 
       // Send the message
-      await addMessage(chatId, senderId, messageContent);
+      if (ChatId === null || ChatId === undefined) {
+        console.log("ChatId is null or undefined:", ChatId);
+        await addChat(randomId, chatMateId, messageContent);
+        await addMessageFirstTime(randomId, senderId, messageContent);
+      } else {
+        console.log("ChatId is not null or undefined:", ChatId);
+        await UpdateChat(ChatId, messageContent);
+        await addMessage(ChatId, senderId, messageContent);
+      }
 
       // Instead of re-fetching all messages, append the new message directly
-     
 
       // Ensure the scroll area goes to the bottom
       scrollToBottom();

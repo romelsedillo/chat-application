@@ -17,6 +17,7 @@ export default function Home() {
   const { loggedInUser, isLoggedIn, loading, checkUserSession } =
     useAuthStore();
   const [selectedChatMate, setSelectedChatMate] = useState(null);
+  const [chatId, setChatId] = useState(null);
 
   // Check user session when the component mounts
   useEffect(() => {
@@ -37,14 +38,14 @@ export default function Home() {
   if (!isLoggedIn) {
     return <Login />;
   }
-
+  console.log(chatId);
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl">
       {/* left side */}
       <div className=" col-span-1 text-2xl text-center p-4 border-x">
         <div className="flex items-center justify-between">
           {/* user profile */}
-          <Profile onChatMateClick={handleChatMateClick}/>
+          <Profile onChatMateClick={handleChatMateClick} />
         </div>
 
         {/* search bar */}
@@ -54,13 +55,16 @@ export default function Home() {
         </div>
 
         {/* chat mate group */}
-        <ChatMateGroup onChatMateClick={handleChatMateClick} />
+        <ChatMateGroup
+          chatId={setChatId}
+          onChatMateClick={handleChatMateClick}
+        />
       </div>
 
       {selectedChatMate ? (
         <>
           {/* Middle: Chat box */}
-          <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id} />
+          <ChatBox chatMate={selectedChatMate} chatId={selectedChatMate?.id} ChatId={chatId}/>
 
           {/* Right: Chat mate profile */}
           <ChatMateProfile chatMate={selectedChatMate} />
