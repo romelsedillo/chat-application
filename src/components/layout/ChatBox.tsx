@@ -17,6 +17,7 @@ import generateRandomString from "@/utils/generateRandomString";
 import { chatsCollection } from "@/utils/ChatsCollection";
 import { UpdateChat } from "@/utils/UpdateChat";
 import { addMessageFirstTime } from "@/utils/AddMessageFirstTime";
+import profileIcon from "@/images/profile-icon.jpg";
 
 const ChatBox = ({
   chatMate,
@@ -130,10 +131,12 @@ const ChatBox = ({
         console.log("ChatId is null or undefined:", ChatId);
         await addChat(randomId, chatMateId, messageContent);
         await addMessageFirstTime(randomId, senderId, messageContent);
+        fetchChats();
       } else {
         console.log("ChatId is not null or undefined:", ChatId);
         await UpdateChat(ChatId, messageContent);
         await addMessage(ChatId, senderId, messageContent);
+        fetchChats();
       }
 
       // Instead of re-fetching all messages, append the new message directly
@@ -144,18 +147,13 @@ const ChatBox = ({
       console.error("Failed to send the message:", error);
     }
   };
-
+  console.log(chatMate);
   return (
     <div className="col-span-2 h-full flex flex-col">
       <div className="flex items-center justify-between py-3 px-2">
         <div className="flex items-center gap-4 capitalize">
           <Avatar>
-            <AvatarImage
-              src={
-                chatMate?.profile ||
-                "https://i.pravatar.cc/150?u=a042581f4e21026704a"
-              }
-            />
+            <AvatarImage src={chatMate?.profileUrl || { profileIcon }} />
             <AvatarFallback>
               {chatMate?.otherParticipantName?.[0] || "CN"}
             </AvatarFallback>

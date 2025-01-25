@@ -11,6 +11,7 @@ interface Chat {
   profile: string;
   users1_id: string;
   users2_id: string;
+  status: string;
   conversations: {
     message: string;
   }[];
@@ -76,7 +77,8 @@ const ChatMateGroup: React.FC<ChatMateGroupProps> = ({
             <ChatMate
               name={chat.otherParticipantName || "Unknown"}
               message={chat.lastMessage || "No messages yet"}
-              profile={chat.profile}
+              profile={chat.profileUrl}
+              status={chat.status}
             />
           </div>
         ))

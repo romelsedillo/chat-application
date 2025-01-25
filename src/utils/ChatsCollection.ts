@@ -73,6 +73,8 @@ export const chatsCollection = async () => {
           otherParticipantName: otherUser?.name || "Unknown User", // Replace with actual attribute name
           lastMessage: doc.last_message,
           lastMessageTime: doc.last_message_time,
+          profileUrl: otherUser?.profileUrl,
+          status: otherUser?.status,
         };
       })
     );

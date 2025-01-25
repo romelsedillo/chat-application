@@ -25,7 +25,7 @@ import profileIcon from "@/images/profile-icon.jpg";
 interface ChatMateProfileProps {
   chatMate: {
     name: string;
-    profile: string; // URL for the avatar
+    profileUrl: string; // URL for the avatar
     role?: string; // Optional property
     address: string;
     gender: string;
@@ -44,13 +44,10 @@ const ChatMateProfile: React.FC<ChatMateProfileProps> = ({ chatMate }) => {
   return (
     <div className="col-span-1 text-2xl text-center pt-6 border-x">
       <div className="w-full flex flex-col items-center justify-center mb-3">
-        <Image
-          height={50}
-          width={50}
-          src="https://i.pravatar.cc/150?u=a042581f4e21026704a"
-          alt="profile"
-          className="rounded-full"
-        />
+        <Avatar>
+          <AvatarImage src={chatMate?.profileUrl} alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
 
         <h1 className="font-semibold capitalize">
           {chatMate?.name || chatMate?.otherParticipantName}

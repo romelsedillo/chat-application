@@ -1,19 +1,13 @@
-import { Client, Databases } from "appwrite";
 import {
-  appwriteEndpoint,
-  projectId,
   databaseId,
   userCollectionId,
   account,
+  databases,
 } from "@/appwrite/appwrite";
 
 // Function to fetch data from Appwrite
 export const userCollection = async () => {
   try {
-    const client = new Client()
-      .setEndpoint(appwriteEndpoint)
-      .setProject(projectId);
-    const databases = new Databases(client);
     const user = await account.get();
     const userId = user.$id;
 
@@ -29,6 +23,7 @@ export const userCollection = async () => {
         name: doc.name,
         email: doc.email,
         status: doc.status,
+        profileUrl: doc.profileUrl,
       }));
 
     return data;

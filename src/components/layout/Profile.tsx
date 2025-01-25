@@ -6,10 +6,15 @@ import { CiLogout } from "react-icons/ci";
 import { account } from "@/appwrite/appwrite";
 import { signedInUser } from "@/utils/SignedInUser";
 import { useState, useEffect } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function Profile({ onChatMateClick }) {
   const [currentUser, setCurrentUser] = useState([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const { loggedInUser } = useAuthStore();
 
   const fetchUserData = async () => {
@@ -61,10 +66,21 @@ export function Profile({ onChatMateClick }) {
 
       {/* Logout Icon */}
       <div className="flex items-center justify-center">
-        <CiLogout
-          className="text-2xl font-semibold cursor-pointer text-gray-700 hover:text-red-500"
-          onClick={handleLogout}
-        />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button>
+                <CiLogout
+                  className="text-2xl font-semibold cursor-pointer text-gray-700 hover:text-red-500"
+                  onClick={handleLogout}
+                />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Logout</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );

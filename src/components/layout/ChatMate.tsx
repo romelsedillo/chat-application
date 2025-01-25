@@ -9,7 +9,12 @@ interface ChatMateProps {
   profile: string;
 }
 
-const ChatMate: React.FC<ChatMateProps> = ({ id, name, message, profile }) => {
+const ChatMate: React.FC<ChatMateProps> = ({
+  name,
+  message,
+  profile,
+  status,
+}) => {
   return (
     <div className="flex items-center gap-4  p-1 capitalize w-full hover:bg-gray-200 cursor-pointer">
       <div className="relative p-1">
@@ -24,7 +29,11 @@ const ChatMate: React.FC<ChatMateProps> = ({ id, name, message, profile }) => {
             <Image height={400} width={400} src={profileIcon} alt="profile" />
           </AvatarFallback>
         </Avatar>
-        <div className="absolute z-10 bottom-1 right-1 h-3 w-3 rounded-full bg-lime-400 border border-white"></div>
+        <div
+          className={`absolute z-10 bottom-1 right-1 h-3 w-3 rounded-full border border-white ${
+            status === "online" ? "bg-lime-400" : "bg-gray-400"
+          }`}
+        ></div>
       </div>
 
       <div className="flex flex-col">

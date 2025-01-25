@@ -38,7 +38,6 @@ export default function Home() {
   if (!isLoggedIn) {
     return <Login />;
   }
-  console.log(chatId);
   return (
     <div className="grid grid-cols-4 bg-white border rounded-xl">
       {/* left side */}

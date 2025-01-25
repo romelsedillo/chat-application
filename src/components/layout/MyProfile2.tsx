@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 
 const MyProfile2 = () => {
   const [currentUser, setCurrentUser] = useState([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const { loggedInUser } = useAuthStore();
 
   const fetchUserData = async () => {
